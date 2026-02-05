@@ -8,13 +8,20 @@ class Controller
 		protected readonly string $id,
 		protected readonly string $taxonomy,
 	) {
-		add_filter("manage_{$this->id}_columns", $this->add());
-		add_filter("manage_{$this->taxonomy}_custom_column", $this->add2());
+		add_filter("manage_{$this->id}_columns", [
+			$this,
+			'add',
+		]);
+		add_filter("manage_{$this->taxonomy}_custom_column", [
+			$this,
+			'add2',
+		]);
 	}
 
 	protected function add($columns)
 	{
 		$columns['product_feeds'] = __('Product feeds', 'woocommerce-plugin-product-feeds');
+		return $columns;
 	}
 
 	protected function add2(string $string, string $column_name, int $term_id)
