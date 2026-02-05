@@ -6,17 +6,53 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit854f65b65e3a19dbc35c4aadcff9e1b0
 {
+    public static $files = array (
+        'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'P' =>
+        array (
+            'Psr\\Container\\' => 14,
+        ),
+        'L' =>
+        array (
+            'Laravel\\SerializableClosure\\' => 28,
+        ),
+        'I' =>
+        array (
+            'Invoker\\' => 8,
+        ),
         'H' =>
         array (
             'Hoo\\ProductFeeds\\' => 17,
         ),
+        'D' =>
+        array (
+            'DI\\' => 3,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Psr\\Container\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Laravel\\SerializableClosure\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
+        ),
+        'Invoker\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-di/invoker/src',
+        ),
         'Hoo\\ProductFeeds\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'DI\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/php-di/php-di/src',
         ),
     );
 

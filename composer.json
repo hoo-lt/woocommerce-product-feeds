@@ -14,5 +14,7 @@
             "email": "hoo@hoo.lt"
         }
     ],
-    "require": {}
+    "require": {
+        "php-di/php-di": "^7.1"
+    }
 }

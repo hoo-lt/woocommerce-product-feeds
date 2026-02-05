@@ -10,9 +10,8 @@ if (!defined('ABSPATH')) {
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Hoo\ProductFeeds\Presentation\Controllers;
+use Hoo\ProductFeeds\Presentation;
+use Hoo\ProductFeeds\Infrastructure;
 
-new Controllers\Controller(
-	'edit-product_cat',
-	'product_cat',
-);
+new Presentation\Taxonomy\Controller(new Infrastructure\Term\Repository)('product_brand');
+new Presentation\Taxonomy\Controller(new Infrastructure\Term\Repository)('product_cat');
