@@ -20,21 +20,21 @@ class Controller
 
 	public function __invoke(Domain\Taxonomy $taxonomy): void
 	{
-		add_filter("manage_edit-{$taxonomy->value}_columns", $this->addColumn(...), PHP_INT_MAX, 1);
-		add_filter("manage_{$taxonomy->value}_custom_column", $this->add2(...), PHP_INT_MAX, 3);
-		add_action("{$taxonomy->value}_add_form_fields", $this->addFormFields(...), PHP_INT_MAX, 1);
-		add_action("{$taxonomy->value}_edit_form_fields", $this->editFormFields(...), PHP_INT_MAX, 2);
-		add_action("create_{$taxonomy->value}", $this->saveField(...), PHP_INT_MAX, 1);
-		add_action("edited_{$taxonomy->value}", $this->saveField(...), PHP_INT_MAX, 1);
+		add_filter("manage_edit-{$taxonomy->value}_columns", $this->manageEditTaxonomyColumns(...), PHP_INT_MAX, 1);
+		add_filter("manage_{$taxonomy->value}_custom_column", $this->manageTaxonomyCustomColumn(...), PHP_INT_MAX, 3);
+		add_action("{$taxonomy->value}_add_form_fields", $this->taxonomyAddFormFields(...), PHP_INT_MAX, 1);
+		add_action("{$taxonomy->value}_edit_form_fields", $this->taxonomyEditFormFields(...), PHP_INT_MAX, 2);
+		add_action("create_{$taxonomy->value}", $this->createTaxonomy(...), PHP_INT_MAX, 1);
+		add_action("edited_{$taxonomy->value}", $this->editedTaxonomy(...), PHP_INT_MAX, 1);
 	}
 
-	protected function addColumn(array $columns): array
+	protected function manageEditTaxonomyColumns(array $columns): array
 	{
 		$columns[self::COLUMN_NAME] = __('Product feeds', 'woocommerce-plugin-product-feeds');
 		return $columns;
 	}
 
-	protected function add2(string $string, string $columnName, int $termId): string
+	protected function manageTaxonomyCustomColumn(string $string, string $columnName, int $termId): string
 	{
 		return match ($columnName) {
 			self::COLUMN_NAME => $this->repository->get($termId)->label(),
@@ -42,7 +42,7 @@ class Controller
 		};
 	}
 
-	protected function editFormFields(WP_Term $term, string $taxonomy): void
+	protected function taxonomyEditFormFields(WP_Term $term, string $taxonomy): void
 	{
 		$labels = Domain\Term::labels();
 
@@ -55,7 +55,7 @@ class Controller
 		]);
 	}
 
-	protected function addFormFields(string $taxonomy): void
+	protected function taxonomyAddFormFields(string $taxonomy): void
 	{
 		$labels = Domain\Term::labels();
 
@@ -68,7 +68,12 @@ class Controller
 		]);
 	}
 
-	protected function saveField(int $termId): void
+	protected function createTaxonomy(int $termId): void
+	{
+		$this->repository->set($termId, Domain\Term::from($_POST[self::COLUMN_NAME]));
+	}
+
+	protected function editedTaxonomy(int $termId): void
 	{
 		$this->repository->set($termId, Domain\Term::from($_POST[self::COLUMN_NAME]));
 	}
