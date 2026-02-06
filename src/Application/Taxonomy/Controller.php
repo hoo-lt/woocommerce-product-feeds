@@ -46,7 +46,7 @@ class Controller
 	{
 		$labels = Domain\Term::labels();
 
-		($this->template)('/EditFormFields/Select', [
+		($this->template)('/Taxonomy/EditFormFields/Select', [
 			'value' => $this->repository->get($term->term_id)->value,
 			'options' => array_map(fn($value, $label) => [
 				'value' => $value,
@@ -59,7 +59,7 @@ class Controller
 	{
 		$labels = Domain\Term::labels();
 
-		($this->template)('/AddFormFields/Select', [
+		($this->template)('/Taxonomy/AddFormFields/Select', [
 			'value' => null,
 			'options' => array_map(fn($value, $label) => [
 				'value' => $value,
