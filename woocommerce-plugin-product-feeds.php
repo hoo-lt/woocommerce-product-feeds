@@ -10,9 +10,16 @@ if (!defined('ABSPATH')) {
 
 require __DIR__ . '/vendor/autoload.php';
 
+const PRODUCT_FEEDS = true;
+
 use Hoo\ProductFeeds\Presentation;
+use Hoo\ProductFeeds\Application;
+use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
 
-$taxonomyController = new Presentation\Taxonomy\Controller(new Infrastructure\Term\Repository);
-$taxonomyController('product_brand');
-$taxonomyController('product_cat');
+$taxonomyController = new Application\Taxonomy\Controller(
+	new Infrastructure\Term\Repository,
+	new Infrastructure\Template(plugin_dir_path(__FILE__))
+);
+$taxonomyController(Domain\Taxonomy::from('product_brand'));
+$taxonomyController(Domain\Taxonomy::from('product_cat'));

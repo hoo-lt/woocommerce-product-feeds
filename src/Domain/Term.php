@@ -1,8 +1,8 @@
 <?php
 
-namespace Hoo\ProductFeeds\Application\Term;
+namespace Hoo\ProductFeeds\Domain;
 
-enum Enum: string
+enum Term: string
 {
 	case Included = 'included';
 	case Excluded = 'excluded';
@@ -15,11 +15,27 @@ enum Enum: string
 		};
 	}
 
+	public function icon(): string
+	{
+		return match ($this) {
+			self::Included => 'e015',
+			self::Excluded => 'e013',
+		};
+	}
+
 	public static function labels(): array
 	{
 		foreach (self::cases() as $case) {
 			$labels[$case->value] = $case->label();
 		}
 		return $labels;
+	}
+
+	public static function icons(): array
+	{
+		foreach (self::cases() as $case) {
+			$icons[$case->value] = $case->icon();
+		}
+		return $icons;
 	}
 }

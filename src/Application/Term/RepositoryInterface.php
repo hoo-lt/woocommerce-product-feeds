@@ -2,12 +2,10 @@
 
 namespace Hoo\ProductFeeds\Application\Term;
 
-use Hoo\ProductFeeds\Application\Term\{
-	Enum,
-};
+use Hoo\ProductFeeds\Domain\Term;
 
 interface RepositoryInterface
 {
-	public function get(int $id): Enum;
-	public function set(int $id, Enum $enum): void;
+	public function get(int $id): Term;
+	public function set(int $id, Term $term): void;
 }
