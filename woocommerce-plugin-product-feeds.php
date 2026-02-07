@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: Product feeds
- * Plugin URI: https://github.com/hoo-lt/woocommerce-plugin-product-feeds
+ * Plugin URI: https://github.com/hoo-lt/woocommerce-product-feeds
  * Description:
  * Version: 1.0.0
  * Requires at least:
