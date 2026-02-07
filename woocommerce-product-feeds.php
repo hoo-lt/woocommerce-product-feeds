@@ -33,6 +33,11 @@ $containerBuilder->addDefinitions([
 	Application\Mappers\Term\MapperInterface::class => DI\get(Infrastructure\Mappers\Term\Mapper::class),
 	Application\Repositories\Term\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Term\Repository::class),
 	Application\TemplateInterface::class => DI\get(Infrastructure\Template::class),
+	Infrastructure\Hook::class => DI\create()
+		->constructor(
+			DI\get(Application\Controllers\Term\ControllerInterface::class),
+			DI\get(Application\Controllers\Feed\Kaina24Lt\Controller::class),
+		),
 ]);
 
 $container = $containerBuilder->build();
