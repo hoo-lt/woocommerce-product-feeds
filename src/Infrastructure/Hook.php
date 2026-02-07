@@ -49,7 +49,7 @@ class Hook
 	public function manage_edit_taxonomy_columns(array $columns): array
 	{
 		return $columns += [
-			'product_feeds' => esc_html__('Product feeds', 'woocommerce-plugin-product-feeds'),
+			'product_feeds' => esc_html__('Product feeds', 'product-feeds'),
 		];
 	}
 

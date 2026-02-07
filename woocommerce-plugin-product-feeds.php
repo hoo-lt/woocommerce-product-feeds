@@ -2,7 +2,18 @@
 
 /**
  * Plugin Name: Product feeds
+ * Plugin URI: https://github.com/hoo-lt/woocommerce-plugin-product-feeds
+ * Description:
  * Version: 1.0.0
+ * Requires at least:
+ * Requires PHP: 8.2
+ * Author: HOO
+ * Author URI: https://github.com/hoo-lt
+ * License: GPL-3.0
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain: product-feeds
+ * Domain Path: /languages
+ * Requires Plugins: woocommerce
  */
 
 if (!defined('ABSPATH')) {
