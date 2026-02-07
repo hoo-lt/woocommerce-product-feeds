@@ -1,34 +1,21 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure;
+namespace Hoo\ProductFeeds\Infrastructure\Hooks;
 
 use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Domain;
 
 use WP_Term;
 
-class Hook
+class FilterHooks
 {
-	protected readonly Application\Controllers\Term\ControllerInterface $termController;
-	protected readonly array $feedControllers;
-
 	public function __construct(
-		Application\Controllers\Term\ControllerInterface $termController,
-		Application\Controllers\Feed\ControllerInterface ...$feedControllers,
+		protected readonly Application\Controllers\Term\ControllerInterface $termController,
 	) {
-		$this->termController = $termController;
-		$this->feedControllers = $feedControllers;
 	}
 
 	public function __invoke(): void
 	{
-		wp_enqueue_style('product-feeds-admin', plugins_url('/assets/css/admin.css', __DIR__ . '/../../woocommerce-product-feeds.php'));
-
-		add_action('init', [
-			$this,
-			'add_feeds'
-		], PHP_INT_MAX, 0);
-
 		foreach (Domain\Taxonomy::cases() as $taxonomy) {
 			add_filter("manage_edit-{$taxonomy->value}_columns", [
 				$this,
@@ -55,20 +42,6 @@ class Hook
 				'edited_taxonomy'
 			], PHP_INT_MAX, 3);
 		}
-	}
-
-	public function add_feeds(): void
-	{
-		foreach ($this->feedControllers as $feedController) {
-			add_feed($feedController->path(), function () use ($feedController): void {
-				echo $feedController();
-			});
-		}
-	}
-
-	public function flush_rewrite_rules(): void
-	{
-		flush_rewrite_rules();
 	}
 
 	public function manage_edit_taxonomy_columns(array $columns): array

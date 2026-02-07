@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Plugin Name: WooCommerce product feeds
+ * Plugin Name: WooCommerce product feeds by HOO
  * Plugin URI: https://github.com/hoo-lt/woocommerce-product-feeds
  * Description:
  * Version: 1.0.0
  * Requires at least: 6.9
  * Requires PHP: 8.2
- * Author: HOO
+ * Author: Baltic digital agency, UAB
  * Author URI: https://github.com/hoo-lt
  * License: GPL-3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: product-feeds
+ * Text Domain: woocommerce-product-feeds
  * Domain Path: /languages
  * Requires Plugins: woocommerce
  */
@@ -33,31 +33,43 @@ $containerBuilder->addDefinitions([
 	Application\Mappers\Term\MapperInterface::class => DI\get(Infrastructure\Mappers\Term\Mapper::class),
 	Application\Repositories\Term\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Term\Repository::class),
 	Application\TemplateInterface::class => DI\get(Infrastructure\Template::class),
-	Infrastructure\Hook::class => DI\create()
+	Infrastructure\Clients\ClientInterface::class => DI\get(Infrastructure\Clients\Client::class),
+	Infrastructure\Hooks\ActionHooks::class => DI\create()
 		->constructor(
-			DI\get(Application\Controllers\Term\ControllerInterface::class),
 			DI\get(Application\Controllers\Feed\Kaina24Lt\Controller::class),
 			DI\get(Application\Controllers\Feed\KainosLt\Controller::class),
 			DI\get(Application\Controllers\Feed\KainotekaLt\Controller::class)
-		)
+		),
+
+	wpdb::class => DI\factory(function (): wpdb {
+		global $wpdb;
+		return $wpdb;
+	}),
 ]);
 
 $container = $containerBuilder->build();
 
-$hook = $container->get(Infrastructure\Hook::class);
-$hook();
+$actionHooks = $container->get(Infrastructure\Hooks\ActionHooks::class);
+$actionHooks();
 
-register_activation_hook(__FILE__, function () use ($hook) {
-	$hook->add_feeds();
-	$hook->flush_rewrite_rules();
+$filterHooks = $container->get(Infrastructure\Hooks\FilterHooks::class);
+$filterHooks();
+
+register_activation_hook(__FILE__, function () {
+	flush_rewrite_rules();
 });
+
+$repository = $container->get(Infrastructure\Repositories\TermTaxonomy\Repository::class);
+var_dump(
+	$repository->excluded()
+);
 
 function get()
 {
-global $wpdb;
+	global $wpdb;
 
-( $wpdb->get_results( $wpdb->prepare(
-    "WITH RECURSIVE excluded_tree AS (
+	($wpdb->get_results($wpdb->prepare(
+		"WITH RECURSIVE excluded_tree AS (
         SELECT term_id FROM {$wpdb->termmeta} WHERE meta_key = %s AND meta_value = %s
         UNION ALL
         SELECT tt.term_id FROM {$wpdb->term_taxonomy} tt
@@ -73,9 +85,7 @@ global $wpdb;
           FROM {$wpdb->term_relationships} tr2
           WHERE tr2.term_taxonomy_id IN (SELECT term_id FROM excluded_tree)
       )",
-    'product_feeds', // Сюда СТРОКУ руками для теста
-    'exclude'           // И сюда СТРОКУ руками
-),ARRAY_A ));
+		'product_feeds', // Сюда СТРОКУ руками для теста
+		'exclude'           // И сюда СТРОКУ руками
+	), ARRAY_A));
 }
-
-get();
