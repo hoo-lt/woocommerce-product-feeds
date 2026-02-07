@@ -1,2 +1,1 @@
-# woocommerce-product-feeds
-WooCommerce product feeds
+# WooCommerce product feeds
