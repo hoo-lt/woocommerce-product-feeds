@@ -14,7 +14,7 @@ class Hook
 	) {
 	}
 
-	public function __invoke()
+	public function __invoke(): void
 	{
 		wp_enqueue_style('product-feeds-admin', plugins_url('/assets/css/admin.css', __DIR__ . '/../../woocommerce-product-feeds.php'));
 
