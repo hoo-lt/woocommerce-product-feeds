@@ -36,4 +36,11 @@ $containerBuilder->addDefinitions([
 ]);
 
 $container = $containerBuilder->build();
-$container->get(Infrastructure\Hook::class)();
+
+$hook = $container->get(Infrastructure\Hook::class);
+$hook();
+
+register_activation_hook(__FILE__, function () use ($hook) {
+	$hook->add_feeds();
+	$hook->flush_rewrite_rules();
+});

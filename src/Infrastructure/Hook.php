@@ -66,6 +66,10 @@ class Hook
 		}
 	}
 
+	public function flush_rewrite_rules(): void {
+		flush_rewrite_rules();
+	}
+
 	public function manage_edit_taxonomy_columns(array $columns): array
 	{
 		return $columns += [
