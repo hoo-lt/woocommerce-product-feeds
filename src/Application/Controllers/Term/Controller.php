@@ -2,8 +2,8 @@
 
 namespace Hoo\ProductFeeds\Application\Controllers\Term;
 
-use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Application;
+use Hoo\ProductFeeds\Domain;
 
 class Controller
 {
