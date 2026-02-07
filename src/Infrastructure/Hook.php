@@ -20,7 +20,7 @@ class Hook
 
 		add_action('init', [
 			$this,
-			'add_feed'
+			'init'
 		], PHP_INT_MAX, 0);
 
 		foreach (Domain\Taxonomy::cases() as $taxonomy) {
@@ -51,7 +51,7 @@ class Hook
 		}
 	}
 
-	public function add_feed(): void
+	public function init(): void
 	{
 		add_feed('kaina24', function () {
 
