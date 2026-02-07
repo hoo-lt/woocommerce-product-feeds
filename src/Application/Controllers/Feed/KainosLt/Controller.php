@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Application\Controllers\Feed\Kaina24Lt;
+namespace Hoo\ProductFeeds\Application\Controllers\Feed\KainosLt;
 
 use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Domain;
@@ -13,7 +13,7 @@ class Controller implements Application\Controllers\Feed\ControllerInterface
 
 	public function path(): string
 	{
-		return 'kaina24-lt.xml';
+		return 'kainos-lt.xml';
 	}
 
 	public function __invoke(): string

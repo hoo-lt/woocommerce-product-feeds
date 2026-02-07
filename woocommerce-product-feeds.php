@@ -37,7 +37,9 @@ $containerBuilder->addDefinitions([
 		->constructor(
 			DI\get(Application\Controllers\Term\ControllerInterface::class),
 			DI\get(Application\Controllers\Feed\Kaina24Lt\Controller::class),
-		),
+			DI\get(Application\Controllers\Feed\KainosLt\Controller::class),
+			DI\get(Application\Controllers\Feed\KainotekaLt\Controller::class)
+		)
 ]);
 
 $container = $containerBuilder->build();

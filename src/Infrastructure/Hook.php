@@ -60,13 +60,14 @@ class Hook
 	public function add_feeds(): void
 	{
 		foreach ($this->feedControllers as $feedController) {
-			add_feed($feedController->path(), function () use ($feedController) {
+			add_feed($feedController->path(), function () use ($feedController): void {
 				echo $feedController();
 			});
 		}
 	}
 
-	public function flush_rewrite_rules(): void {
+	public function flush_rewrite_rules(): void
+	{
 		flush_rewrite_rules();
 	}
 
