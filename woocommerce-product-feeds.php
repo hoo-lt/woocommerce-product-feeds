@@ -5,7 +5,7 @@
  * Plugin URI: https://github.com/hoo-lt/woocommerce-product-feeds
  * Description:
  * Version: 1.0.0
- * Requires at least: 6.5
+ * Requires at least: 6.9
  * Requires PHP: 8.2
  * Author: HOO
  * Author URI: https://github.com/hoo-lt
@@ -17,17 +17,15 @@
  */
 
 if (!defined('ABSPATH')) {
-	exit;
+	die();
 }
 
 require __DIR__ . '/vendor/autoload.php';
 
-const PRODUCT_FEEDS = true;
+const WOOCOMMERCE_PRODUCT_FEEDS = true;
 
 use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Infrastructure;
-
-use DI;
 
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([

@@ -1,5 +1,5 @@
 <?php
-if (!defined('PRODUCT_FEEDS')) {
+if (!defined('WOOCOMMERCE_PRODUCT_FEEDS')) {
 	die();
 }
 ?>
