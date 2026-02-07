@@ -63,12 +63,12 @@ class Hook
 
 	public function taxonomy_add_form_fields(string $taxonomy): void
 	{
-		echo wp_kses_post($this->termController->addTemplate());
+		echo $this->termController->addTemplate();
 	}
 
 	public function taxonomy_edit_form_fields(WP_Term $tag, string $taxonomy): void
 	{
-		echo wp_kses_post($this->termController->editTemplate($tag->term_id));
+		echo $this->termController->editTemplate($tag->term_id);
 	}
 
 	public function created_taxonomy(int $term_id, int $tt_id, array $args): void

@@ -12,9 +12,9 @@ if (!defined('PRODUCT_FEEDS')) {
 	</th>
 	<td>
 		<select name="product_feeds" id="product_feeds" class="postform" aria-describedby="product_feeds-description">
-			<?php foreach ($options as $option): ?>
-				<option class="level-0" value="<?= esc_attr($option['value']); ?>">
-					<?= esc_html($option['label']); ?>
+			<?php foreach ($labels as $label): ?>
+				<option class="level-0" value="<?= esc_attr($label['value']); ?>">
+					<?= esc_html($label['label']); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
