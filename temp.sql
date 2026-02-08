@@ -1,100 +1,151 @@
-SELECT
-    posts.ID,
-    posts.post_type,
-    posts.post_parent,
-    posts.post_title,
-    tt.taxonomy,
-    terms.term_id,
-    terms.name AS value_name
-FROM wp_posts AS posts
-
--- 1. Джойним атрибуты (через родителя в любом случае, так как в Woo структура там)
-INNER JOIN wp_term_relationships AS tr ON tr.object_id = (
-    CASE WHEN posts.post_type = 'product_variation' THEN posts.post_parent ELSE posts.ID END
+WITH product_list AS (
+    -- Берем только базу: простые опубликованные товары
+    SELECT p.ID, p.post_title
+    FROM wp_posts p
+    INNER JOIN wp_term_relationships tr ON p.ID = tr.object_id
+    INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+        AND tt.taxonomy = 'product_type'
+    INNER JOIN wp_terms t ON tt.term_id = t.term_id AND t.slug = 'simple'
+    WHERE p.post_type = 'product' AND p.post_status = 'publish'
+),
+all_categories AS (
+    -- Собираем все категории для этих товаров
+    SELECT tr.object_id, t.name as cat_name
+    FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'product_cat'
+    JOIN wp_terms t ON tt.term_id = t.term_id
+),
+all_brands AS (
+    -- Собираем все бренды
+    SELECT tr.object_id, t.name as brand_name
+    FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'product_brand'
+    JOIN wp_terms t ON tt.term_id = t.term_id
+),
+all_attributes AS (
+    -- Собираем все атрибуты
+    SELECT tr.object_id, tt.taxonomy as attr_slug, t.name as attr_value
+    FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+    JOIN wp_terms t ON tt.term_id = t.term_id
+    JOIN wp_woocommerce_attribute_taxonomies wat ON tt.taxonomy = CONCAT('pa_', wat.attribute_name)
 )
-INNER JOIN wp_term_taxonomy AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy LIKE 'pa_%'
-INNER JOIN wp_terms AS terms ON tt.term_id = terms.term_id
 
--- 2. Цепляем мету конкретно этой строки
-LEFT JOIN wp_postmeta AS pm ON posts.ID = pm.post_id
-    AND pm.meta_key = CONCAT('attribute_', tt.taxonomy)
+-- Теперь сшиваем всё в один результат
+SELECT
+    pl.ID AS product_id,
+    pl.post_title AS product_name,
+    ac.cat_name AS category,
+    ab.brand_name AS brand,
+    aa.attr_slug,
+    aa.attr_value
+FROM product_list pl
+LEFT JOIN all_categories ac ON pl.ID = ac.object_id
+LEFT JOIN all_brands ab ON pl.ID = ab.object_id
+LEFT JOIN all_attributes aa ON pl.ID = aa.object_id
+ORDER BY pl.ID;
 
-WHERE (posts.ID = 1983  OR posts.post_parent = 1983 )
-  AND posts.post_status = 'publish'
-  AND (
-    -- ЛОГИКА ДЛЯ ВАРИАЦИЙ:
-    (posts.post_type = 'product_variation' AND (
-        -- А) Значение в мете совпадает со слагом термина (конкретный выбор: Синий)
-        pm.meta_value = terms.slug
-        OR
-        -- Б) В вариации выбрано "Любое значение" (пустая строка в мете)
-        pm.meta_value = ''
-        OR
-        -- В) Этого атрибута НЕТ в настройках вариаций (наследуемая "жопа")
-        -- Проверяем, что для этой таксономии у этой вариации вообще нет записи в postmeta
-        NOT EXISTS (
-            SELECT 1 FROM wp_postmeta AS pm_check
-            WHERE pm_check.post_id = posts.ID
-              AND pm_check.meta_key = CONCAT('attribute_', tt.taxonomy)
-        )
-    ))
-    OR
-    -- ЛОГИКА ДЛЯ РОДИТЕЛЯ:
-    -- Выводим только те атрибуты, которые НЕ стали вариациями (общие)
-    -- Если хочешь видеть у родителя ВООБЩЕ ВСЁ (как справочник) - оставь просто posts.post_type = 'product'
-    (posts.post_type = 'product' AND NOT EXISTS (SELECT 1 FROM wp_posts AS child WHERE child.post_parent = posts.ID))
+
+-- сдел запрос
+WITH product_list AS (
+    -- База: только простые опубликованные товары
+    SELECT p.ID, p.post_title
+    FROM wp_posts p
+    INNER JOIN wp_term_relationships tr ON p.ID = tr.object_id
+    INNER JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+        AND tt.taxonomy = 'product_type'
+    INNER JOIN wp_terms t ON tt.term_id = t.term_id AND t.slug = 'simple'
+    WHERE p.post_type = 'product' AND p.post_status = 'publish'
+),
+tax_data AS (
+    -- Собираем все нужные таксономии одним махом
+    SELECT
+        tr.object_id,
+        t.name AS term_name,
+        tt.taxonomy
+    FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+    JOIN wp_terms t ON tt.term_id = t.term_id
+    WHERE tt.taxonomy IN ('product_cat', 'product_brand')
 )
-ORDER BY posts.ID, tt.taxonomy;
+
+-- Итоговая сборка
+SELECT
+    pl.ID AS product_id,
+    pl.post_title AS product_name,
+    cat.term_name AS category,
+    brand.term_name AS brand
+FROM product_list pl
+-- Джойним одну и ту же CTE, фильтруя по типу таксономии
+LEFT JOIN tax_data cat ON pl.ID = cat.object_id AND cat.taxonomy = 'product_cat'
+LEFT JOIN tax_data brand ON pl.ID = brand.object_id AND brand.taxonomy = 'product_brand'
+ORDER BY pl.ID;
+
+------
 
 
+WITH variation_list AS (
+    SELECT p.ID AS var_id, p.post_parent AS parent_id, p.post_title AS var_name
+    FROM wp_posts p
+    WHERE p.post_type = 'product_variation' AND p.post_status = 'publish'
+),
+-- Собираем все атрибуты в одну кучу с приоритетом
+combined_attributes AS (
+    -- 1. Берем атрибуты вариаций (Приоритет 1)
+    SELECT
+        pm.post_id AS target_id,
+        REPLACE(pm.meta_key, 'attribute_', '') AS attr_slug,
+        COALESCE(t.name, pm.meta_value) AS attr_value,
+        1 AS priority
+    FROM wp_postmeta pm
+    JOIN wp_terms t ON pm.meta_value = t.slug
+    WHERE pm.meta_key LIKE 'attribute_pa_%' AND pm.meta_value != ''
+      AND pm.post_id IN (SELECT var_id FROM variation_list)
 
+    UNION ALL
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    -- 2. Берем атрибуты родителей (Приоритет 2)
+    SELECT
+        vl.var_id AS target_id,
+        tt.taxonomy AS attr_slug,
+        t.name AS attr_value,
+        2 AS priority
+    FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+    JOIN wp_terms t ON tt.term_id = t.term_id
+    JOIN wp_woocommerce_attribute_taxonomies wat ON tt.taxonomy = CONCAT('pa_', wat.attribute_name)
+    JOIN variation_list vl ON tr.object_id = vl.parent_id
+),
+-- Оставляем только самое важное значение для каждого слага
+filtered_attributes AS (
+    SELECT target_id, attr_slug, attr_value
+    FROM (
+        SELECT *,
+               ROW_NUMBER() OVER(PARTITION BY target_id, attr_slug ORDER BY priority ASC) as rn
+        FROM combined_attributes
+    ) tmp
+    WHERE rn = 1
+),
+all_categories AS (
+    SELECT tr.object_id, t.name as cat_name FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'product_cat'
+    JOIN wp_terms t ON tt.term_id = t.term_id
+),
+all_brands AS (
+    SELECT tr.object_id, t.name as brand_name FROM wp_term_relationships tr
+    JOIN wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = 'product_brand'
+    JOIN wp_terms t ON tt.term_id = t.term_id
+)
 
 SELECT
-    wp_posts.post_title AS 'Товар',
-    (SELECT wp_terms.name FROM wp_terms
-     JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id
-     JOIN wp_term_relationships ON wp_term_taxonomy.term_taxonomy_id = wp_term_relationships.term_taxonomy_id
-     WHERE wp_term_relationships.object_id = IF(wp_posts.post_type = 'product_variation', wp_posts.post_parent, wp_posts.ID)
-     AND wp_term_taxonomy.taxonomy = 'product_cat' LIMIT 1) AS 'Категория',
-
-    (SELECT wp_terms.name FROM wp_terms
-     JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id
-     JOIN wp_term_relationships ON wp_term_taxonomy.term_taxonomy_id = wp_term_relationships.term_taxonomy_id
-     WHERE wp_term_relationships.object_id = IF(wp_posts.post_type = 'product_variation', wp_posts.post_parent, wp_posts.ID)
-     AND wp_term_taxonomy.taxonomy = 'product_brand' LIMIT 1) AS 'Бренд',
-
-    (SELECT wp_terms.name FROM wp_terms
-     JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id
-     JOIN wp_term_relationships ON wp_term_taxonomy.term_taxonomy_id = wp_term_relationships.term_taxonomy_id
-     WHERE wp_term_relationships.object_id = IF(wp_posts.post_type = 'product_variation', wp_posts.post_parent, wp_posts.ID)
-     AND wp_term_taxonomy.taxonomy = 'product_tag' LIMIT 1) AS 'Тег'
-
-FROM wp_posts
-WHERE wp_posts.post_status = 'publish'
-  AND (
-    -- Берем вариации
-    wp_posts.post_type = 'product_variation'
-    OR
-    -- Или простые товары, у которых нет вариаций (чтобы не дублировать)
-    (wp_posts.post_type = 'product' AND NOT EXISTS (
-        SELECT 1 FROM wp_posts AS children WHERE children.post_parent = wp_posts.ID AND children.post_type = 'product_variation'
-    ))
-  )
-ORDER BY wp_posts.ID;
+    vl.var_id AS product_id,
+    vl.var_name AS product_name,
+    ac.cat_name AS category,
+    ab.brand_name AS brand,
+    fa.attr_slug,
+    fa.attr_value
+FROM variation_list vl
+LEFT JOIN filtered_attributes fa ON vl.var_id = fa.target_id
+LEFT JOIN all_categories ac ON vl.parent_id = ac.object_id
+LEFT JOIN all_brands ab ON vl.parent_id = ab.object_id
+ORDER BY vl.var_id;
