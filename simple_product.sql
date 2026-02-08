@@ -129,6 +129,11 @@ terms AS (
 SELECT
 	posts.ID AS id,
 	posts.post_title AS name,
+
+	price.meta_value AS price,
+	stock.meta_value AS stock,
+	global_unique_id.meta_value AS global_unique_id,
+
 	brand.name AS brand_name,
 	category.name AS category_name,
 	attribute.attribute_label AS attribute_name,
@@ -136,6 +141,16 @@ SELECT
 
 FROM posts
 
+JOIN wp_postmeta AS price
+	ON price.post_id = posts.ID
+	AND price.meta_key = '_price'
+
+LEFT JOIN wp_postmeta AS stock
+	ON stock.post_id = posts.ID
+	AND stock.meta_key = '_stock'
+LEFT JOIN wp_postmeta AS global_unique_id
+	ON global_unique_id.post_id = posts.ID
+	AND global_unique_id.meta_key = '_global_unique_id'
 LEFT JOIN terms AS brand
 	ON brand.object_id = posts.ID
 	AND brand.taxonomy = 'product_brand'
