@@ -22,16 +22,16 @@ class Query implements Infrastructure\Queries\QueryInterface
 	{
 		$postsId = $this->excludedIds;
 
-		$postsIdNotIn = $postsId ? "wp_posts.ID NOT IN (" . implode(', ', array_fill(0, count($postsId), '%d')) . ")" : '';
+		$where = [
+			'wp_posts.post_type' => ' = product',
+			'wp_posts.post_status' => ' = publish',
+		];
 
-		$where = ($postsIdNotIn) ? <<<SQL
-				WHERE wp_posts.post_type = 'product'
-					AND wp_posts.post_status = 'publish'
-					AND {$postsIdNotIn}
-			SQL : <<<SQL
-				WHERE wp_posts.post_type = 'product'
-					AND wp_posts.post_status = 'publish'
-			SQL;
+		if ($this->excludedIds) {
+			$where['wp_posts.ID'] = ' NOT IN (' . implode(', ', array_fill(0, count($this->excludedIds), '%d')) . ')';
+		}
+
+		$where = 'WHERE ' . implode(' AND ', $where);
 
 		$query = <<<SQL
 			WITH posts AS (
