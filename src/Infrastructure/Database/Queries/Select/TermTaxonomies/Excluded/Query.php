@@ -1,13 +1,13 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Product\Excluded;
+namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\TermTaxonomies\Excluded;
 
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
 
 use wpdb;
 
-class Query implements Infrastructure\Database\Queries\QueryInterface
+class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 {
 	public function __construct(
 		protected readonly wpdb $wpdb
@@ -16,12 +16,7 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 
 	public function __invoke(): string
 	{
-		$taxonomies = Domain\Taxonomy::cases();
-		$term = Domain\Term::Exclude;
-
-		$termTaxonomyTaxonomy = implode(', ', array_fill(0, count($taxonomies), '%s'));
-
-		$sql = <<<SQL
+		$query = <<<SQL
 			WITH RECURSIVE cte_term_taxonomy AS (
 				SELECT
 					term_taxonomy.term_taxonomy_id,
@@ -32,8 +27,7 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 				JOIN {$this->wpdb->termmeta} AS termmeta
 					ON termmeta.term_id = term_taxonomy.term_id
 
-				WHERE term_taxonomy.taxonomy IN ({$termTaxonomyTaxonomy})
-					AND termmeta.meta_key = 'product_feeds'
+				WHERE termmeta.meta_key = %s
 					AND termmeta.meta_value = %s
 
 				UNION ALL
@@ -46,8 +40,6 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 
 				JOIN cte_term_taxonomy
 					ON cte_term_taxonomy.term_id = term_taxonomy.parent
-
-				WHERE term_taxonomy.taxonomy IN ({$termTaxonomyTaxonomy})
 			)
 
 			SELECT DISTINCT
@@ -56,13 +48,10 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 			FROM cte_term_taxonomy AS term_taxonomy
 		SQL;
 
-		$taxonomyValues = array_map(fn($taxonomy) => $taxonomy->value, $taxonomies);
-		$termValue = $term->value;
-
-		return $this->wpdb->prepare($sql, ...[
-			...$taxonomyValues,
-			$termValue,
-			...$taxonomyValues
-		]);
+		return $this->wpdb->prepare(
+			$query,
+			Domain\Term\Meta::KEY,
+			Domain\Term\Meta::Excluded->value,
+		);
 	}
 }

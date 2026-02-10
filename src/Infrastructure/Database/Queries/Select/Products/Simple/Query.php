@@ -1,47 +1,31 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Product\Simple;
+namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\Products\Simple;
 
 use Hoo\ProductFeeds\Infrastructure;
 
 use wpdb;
 
-class Query implements Infrastructure\Database\Queries\QueryInterface
+class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 {
-	protected array $includedIds = [];
-	protected array $excludedIds = [];
+	protected array $excludedTermTaxonomyIds = [];
 
 	public function __construct(
 		protected readonly wpdb $wpdb,
 	) {
 	}
 
-	public function included(int ...$ids): self
+	public function excludeTermTaxonomies(int ...$ids): self
 	{
 		$clone = clone $this;
-		$clone->includedIds = $ids;
-
-		return $clone;
-	}
-
-	public function excluded(int ...$ids): self
-	{
-		$clone = clone $this;
-		$clone->excludedIds = $ids;
+		$clone->excludedTermTaxonomyIds = $ids;
 
 		return $clone;
 	}
 
 	public function __invoke(): string
 	{
-		$where['posts.post_type'] = '= \'product\'';
-		$where['posts.post_status'] = '= \'publish\'';
-
-		if ($this->excludedIds) {
-			$where['posts.ID'] = 'NOT IN (' . implode(',', array_map(fn() => '%d', $this->excludedIds)) . ')';
-		}
-
-		$where = 'WHERE ' . implode(' AND ', array_map(fn($key, $value) => "$key $value", array_keys($where), array_values($where)));
+		$where = $this->excludedTermTaxonomyIds ? 'WHERE term_relationships.term_taxonomy_id IN (' . implode(',', array_map(fn() => '%d', $this->excludedTermTaxonomyIds)) . ')' : '';
 
 		$query = <<<SQL
 			WITH cte_term_relationships AS (
@@ -50,7 +34,7 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 
 				FROM {$this->wpdb->term_relationships} AS term_relationships
 
-				WHERE term_relationships.term_taxonomy_id IN (--ids--)
+				{$where}
 			),
 
 			cte_posts AS (
@@ -69,7 +53,12 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 					ON terms.term_id = term_taxonomy.term_id
 					AND terms.slug = 'simple'
 
-				{$where}
+				LEFT JOIN cte_term_relationships
+					ON cte_term_relationships.object_id = posts.ID
+
+				WHERE posts.post_type = 'product'
+					AND posts.post_status = 'publish'
+					AND cte_term_relationships.object_id IS NULL
 			),
 
 			cte_woocommerce_attribute_taxonomies AS (
@@ -96,9 +85,9 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 					ON terms.term_id = term_taxonomy.term_id
 
 				WHERE term_taxonomy.taxonomy IN (
-					'product_brand',
-					'product_cat'
-				)
+						'product_brand',
+						'product_cat'
+					)
 			),
 
 			cte_attribute AS (
@@ -153,9 +142,9 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 				ON attribute.object_id = posts.ID
 		SQL;
 
-		return $this->wpdb->prepare($query, ...[
-			...$this->includedIds,
-			...$this->excludedIds,
-		]);
+		return $this->wpdb->prepare(
+			$query,
+			$this->excludedTermTaxonomyIds,
+		);
 	}
 }

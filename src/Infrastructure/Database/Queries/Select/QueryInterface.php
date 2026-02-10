@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Database\Queries;
+namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select;
 
 interface QueryInterface
 {

@@ -28,10 +28,10 @@ WITH RECURSIVE term_taxonomy AS (
 		ON term_taxonomy.term_id = wp_term_taxonomy.parent
 
 	WHERE wp_term_taxonomy.taxonomy IN (
-		'product_brand',
-		'product_cat',
-		'product_tag'
-	)
+			'product_brand',
+			'product_cat',
+			'product_tag'
+		)
 ),
 
 term_relationships AS (

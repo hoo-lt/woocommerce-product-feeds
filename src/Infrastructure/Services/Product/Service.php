@@ -8,24 +8,24 @@ class Service
 {
 	public function __construct(
 		protected readonly Infrastructure\Database\Database $database,
-		protected readonly Infrastructure\Database\Queries\Product\Excluded\Query $excludedQuery,
-		protected readonly Infrastructure\Database\Queries\Product\Simple\Query $simpleQuery,
+		protected readonly Infrastructure\Database\Queries\Select\TermTaxonomies\Excluded\Query $selectExcludedTermTaxonomiesQuery,
+		protected readonly Infrastructure\Database\Queries\Select\Products\Simple\Query $selectSimpleProductsQuery,
 	) {
 	}
 
 	public function __invoke()
 	{
-		$excluded = $this->database->select(
-			$this->excludedQuery
+		$excludedTermTaxonomies = $this->database->select(
+			$this->selectExcludedTermTaxonomiesQuery
 		);
 
-		$excludedIds = array_map(fn($excluded) => (int) $excluded['id'], $excluded);
+		$excludedTermTaxonomyIds = array_map(fn($excludedTermTaxonomy) => (int) $excludedTermTaxonomy['term_taxonomy_id'], $excludedTermTaxonomies);
 
-		$simple = $this->database->select(
-			$this->simpleQuery
-				->excluded(...$excludedIds)
+		$simpleProducts = $this->database->select(
+			$this->selectSimpleProductsQuery
+				->excludeTermTaxonomies(...$excludedTermTaxonomyIds)
 		);
 
-		return $simple;
+		return $simpleProducts;
 	}
 }

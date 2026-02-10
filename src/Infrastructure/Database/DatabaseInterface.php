@@ -6,5 +6,5 @@ use Hoo\ProductFeeds\Infrastructure;
 
 interface DatabaseInterface
 {
-	public function select(Infrastructure\Database\Queries\QueryInterface $query): array;
+	public function select(Infrastructure\Database\Queries\Select\QueryInterface $query): array;
 }

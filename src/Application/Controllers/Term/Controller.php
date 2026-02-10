@@ -8,8 +8,8 @@ use Hoo\ProductFeeds\Domain;
 class Controller implements ControllerInterface
 {
 	public function __construct(
-		protected readonly Application\Mappers\Term\MapperInterface $mapper,
-		protected readonly Application\Repositories\Term\RepositoryInterface $repository,
+		protected readonly Application\Mappers\Term\Meta\MapperInterface $termMetaMapper,
+		protected readonly Application\Repositories\Term\Meta\RepositoryInterface $termMetaRepository,
 		protected readonly Application\TemplateInterface $template,
 	) {
 	}
@@ -17,54 +17,34 @@ class Controller implements ControllerInterface
 	public function template(int $id): string
 	{
 		return ($this->template)('/Term', [
-			'icon' => $this->icon($id),
+			'icon' => $this->termMetaMapper->icon(
+				$this->termMetaRepository->get($id)
+			)
 		]);
 	}
 
 	public function addTemplate(): string
 	{
 		return ($this->template)('/Term/Add', [
-			'labels' => $this->labels(),
+			'labels' => $this->termMetaMapper->labels(),
 		]);
 	}
 
 	public function editTemplate(int $id): string
 	{
 		return ($this->template)('/Term/Edit', [
-			'value' => $this->value($id),
-			'labels' => $this->labels(),
+			'value' => $this->termMetaRepository->get($id)->value,
+			'labels' => $this->termMetaMapper->labels(),
 		]);
 	}
 
 	public function add(int $id, string $value): void
 	{
-		$this->repository->set($id, Domain\Term::from($value));
+		$this->termMetaRepository->set($id, Domain\Term\Meta::from($value));
 	}
 
 	public function edit(int $id, string $value): void
 	{
-		$this->repository->set($id, Domain\Term::from($value));
-	}
-
-	protected function value(int $id): string
-	{
-		return $this->repository->get($id)->value;
-	}
-
-	protected function labels(): array
-	{
-		$labels = $this->mapper->labels();
-
-		return array_map(fn($value, $label) => [
-			'value' => $value,
-			'label' => $label,
-		], array_keys($labels), array_values($labels));
-	}
-
-	protected function icon(int $id): string
-	{
-		return $this->mapper->icon(
-			$this->repository->get($id)
-		);
+		$this->termMetaRepository->set($id, Domain\Term\Meta::from($value));
 	}
 }
