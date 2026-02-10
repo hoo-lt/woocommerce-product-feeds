@@ -37,10 +37,6 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 		$where['posts.post_type'] = '= \'product\'';
 		$where['posts.post_status'] = '= \'publish\'';
 
-		if ($this->includedIds) {
-			$where['posts.ID'] = 'IN (' . implode(',', array_map(fn() => '%d', $this->includedIds)) . ')';
-		}
-
 		if ($this->excludedIds) {
 			$where['posts.ID'] = 'NOT IN (' . implode(',', array_map(fn() => '%d', $this->excludedIds)) . ')';
 		}
@@ -48,7 +44,16 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 		$where = 'WHERE ' . implode(' AND ', array_map(fn($key, $value) => "$key $value", array_keys($where), array_values($where)));
 
 		$query = <<<SQL
-			WITH cte_posts AS (
+			WITH cte_term_relationships AS (
+				SELECT DISTINCT
+					term_relationships.object_id
+
+				FROM {$this->wpdb->term_relationships} AS term_relationships
+
+				WHERE term_relationships.term_taxonomy_id IN (--ids--)
+			),
+
+			cte_posts AS (
 				SELECT
 					posts.ID,
 					posts.post_title

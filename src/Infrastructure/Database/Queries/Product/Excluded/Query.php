@@ -51,16 +51,9 @@ class Query implements Infrastructure\Database\Queries\QueryInterface
 			)
 
 			SELECT DISTINCT
-				term_relationships.object_id AS id
+				term_taxonomy.term_taxonomy_id
 
-			FROM {$this->wpdb->term_relationships} AS term_relationships
-
-			WHERE term_relationships.term_taxonomy_id IN (
-				SELECT
-					term_taxonomy_id
-
-				FROM cte_term_taxonomy
-			)
+			FROM cte_term_taxonomy AS term_taxonomy
 		SQL;
 
 		$taxonomyValues = array_map(fn($taxonomy) => $taxonomy->value, $taxonomies);
