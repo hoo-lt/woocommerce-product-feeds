@@ -3,7 +3,7 @@
         'name' => 'hoo-lt/woocommerce-product-feeds',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e87edca3301f875ae91bdc0fadf409df238c7325',
+        'reference' => 'ca56dd1200e3c05125976376864a38a0e1078cf4',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'hoo-lt/woocommerce-product-feeds' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e87edca3301f875ae91bdc0fadf409df238c7325',
+            'reference' => 'ca56dd1200e3c05125976376864a38a0e1078cf4',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
