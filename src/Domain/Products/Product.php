@@ -12,8 +12,8 @@ class Product
 		public string $name,
 		public string $slug,
 		public float $price,
-		public int $stock,
-		public string $gtin,
+		public ?int $stock,
+		public ?string $gtin,
 	) {
 		$this->brands = new Product\Brands();
 		$this->categories = new Product\Categories();

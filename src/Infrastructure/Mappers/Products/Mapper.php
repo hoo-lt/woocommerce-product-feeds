@@ -15,12 +15,12 @@ class Mapper
 				$product = $products->get((int) $row['id']);
 			} else {
 				$product = new Domain\Products\Product(
-					id: (int) $row['id'],
-					name: $row['name'],
-					slug: $row['slug'],
-					price: (float) $row['price'],
-					stock: (int) $row['stock'],
-					gtin: $row['gtin']
+					(int) $row['id'],
+					$row['name'],
+					$row['slug'],
+					(float) $row['price'],
+					(int) $row['stock'],
+					$row['gtin']
 				);
 				$products->add($product);
 			}

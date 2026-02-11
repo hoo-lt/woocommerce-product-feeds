@@ -8,7 +8,7 @@ use Traversable;
 
 class Categories implements IteratorAggregate
 {
-	protected array $categories;
+	protected array $categories = [];
 
 	public function get(int $id): Categories\Category
 	{
@@ -44,6 +44,6 @@ class Categories implements IteratorAggregate
 
 	public function getIterator(): Traversable
 	{
-		return new ArrayIterator($this->categories);
+		return new ArrayIterator(array_values($this->categories));
 	}
 }

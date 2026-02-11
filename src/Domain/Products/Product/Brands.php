@@ -8,7 +8,7 @@ use Traversable;
 
 class Brands implements IteratorAggregate
 {
-	protected array $brands;
+	protected array $brands = [];
 
 	public function get(int $id): Brands\Brand
 	{
@@ -44,6 +44,6 @@ class Brands implements IteratorAggregate
 
 	public function getIterator(): Traversable
 	{
-		return new ArrayIterator($this->brands);
+		return new ArrayIterator(array_values($this->brands));
 	}
 }
