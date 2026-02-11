@@ -19,11 +19,11 @@ class Service
 			$this->selectExcludedTermTaxonomiesQuery
 		);
 
-		$excludedTermTaxonomyIds = array_map(fn($excludedTermTaxonomy) => (int) $excludedTermTaxonomy['term_taxonomy_id'], $excludedTermTaxonomies);
+		$excludedTermTaxonomies = array_map(fn($excludedTermTaxonomy) => (int) $excludedTermTaxonomy['term_taxonomy_id'], $excludedTermTaxonomies);
 
 		$simpleProducts = $this->database->select(
 			$this->selectSimpleProductsQuery
-				->excludeTermTaxonomies(...$excludedTermTaxonomyIds)
+				->excludeTermTaxonomyIds(...$excludedTermTaxonomies)
 		);
 
 		return $simpleProducts;

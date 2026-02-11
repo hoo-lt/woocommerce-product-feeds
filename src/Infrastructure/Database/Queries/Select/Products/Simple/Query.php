@@ -15,10 +15,10 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 	) {
 	}
 
-	public function excludeTermTaxonomies(int ...$ids): self
+	public function excludeTermTaxonomyIds(int ...$termTaxonomyIds): self
 	{
 		$clone = clone $this;
-		$clone->excludedTermTaxonomyIds = $ids;
+		$clone->excludedTermTaxonomyIds = $termTaxonomyIds;
 
 		return $clone;
 	}
@@ -32,7 +32,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 			':terms' => $this->wpdb->terms,
 			':woocommerce_attribute_taxonomies' => $this->wpdb->prefix . 'woocommerce_attribute_taxonomies',
 			':postmeta' => $this->wpdb->postmeta,
-			':WHERE' => $this->excludedTermTaxonomyIds ? 'WHERE term_relationships.term_taxonomy_id IN (' . implode(',', array_map(fn() => '%d', $this->excludedTermTaxonomyIds)) . ')' : '',
+			':WHERE term_relationships.term_taxonomy_id IN ()' => $this->excludedTermTaxonomyIds ? 'WHERE term_relationships.term_taxonomy_id IN (' . implode(',', array_map(fn() => '%d', $this->excludedTermTaxonomyIds)) . ')' : '',
 		]);
 
 		return $this->wpdb->prepare($query, [

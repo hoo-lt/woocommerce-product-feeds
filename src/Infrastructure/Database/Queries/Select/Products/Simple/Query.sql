@@ -4,7 +4,7 @@ WITH cte_term_relationships AS (
 
 	FROM :term_relationships AS term_relationships
 
-	:WHERE
+	:WHERE term_relationships.term_taxonomy_id IN ()
 ),
 
 cte_posts AS (
