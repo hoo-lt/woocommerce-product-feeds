@@ -29,10 +29,10 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 
 	public function __invoke(): string
 	{
-		return $this->wpdb->prepare(strtr($this->filename, [
+		return $this->wpdb->prepare(strtr($this->query, [
 			':WHERE' => $this->excludedTermTaxonomyIds ? 'WHERE term_relationships.term_taxonomy_id IN (' . implode(',', array_map(fn() => '%d', $this->excludedTermTaxonomyIds)) . ')' : '',
 		]), [
-			$this->excludedTermTaxonomyIds,
+			...$this->excludedTermTaxonomyIds,
 		]);
 	}
 

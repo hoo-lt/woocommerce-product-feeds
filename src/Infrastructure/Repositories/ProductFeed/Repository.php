@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Services\ProductFeed;
+namespace Hoo\ProductFeeds\Infrastructure\Repositories\ProductFeed;
 
 use Hoo\ProductFeeds\Infrastructure;
 
-class Service
+class Repository
 {
 	public function __construct(
 		protected readonly Infrastructure\Database\Database $database,
