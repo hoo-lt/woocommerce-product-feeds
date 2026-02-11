@@ -30,15 +30,15 @@ use Hoo\ProductFeeds\Infrastructure;
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
 	Application\Controllers\Term\ControllerInterface::class => DI\get(Application\Controllers\Term\Controller::class),
-	Application\Mappers\Term\Meta\MapperInterface::class => DI\get(Infrastructure\Mappers\Term\Meta\Mapper::class),
-	Application\Repositories\Term\Meta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Term\Meta\Repository::class),
+	Application\Mappers\TermMeta\MapperInterface::class => DI\get(Infrastructure\Mappers\TermMeta\Mapper::class),
+	Application\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
 	Application\TemplateInterface::class => DI\get(Infrastructure\Template::class),
 	Infrastructure\Database\DatabaseInterface::class => DI\get(Infrastructure\Database\Database::class),
 	Infrastructure\Hooks\ActionHooks::class => DI\create()
 		->constructor(
-			DI\get(Application\Controllers\Feed\Kaina24Lt\Controller::class),
-			DI\get(Application\Controllers\Feed\KainosLt\Controller::class),
-			DI\get(Application\Controllers\Feed\KainotekaLt\Controller::class)
+			DI\get(Application\Controllers\ProductFeed\Kaina24Lt\Controller::class),
+			DI\get(Application\Controllers\ProductFeed\KainosLt\Controller::class),
+			DI\get(Application\Controllers\ProductFeed\KainotekaLt\Controller::class)
 		),
 
 	wpdb::class => DI\factory(function (): wpdb {

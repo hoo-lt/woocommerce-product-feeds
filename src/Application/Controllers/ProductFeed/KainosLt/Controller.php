@@ -1,11 +1,11 @@
 <?php
 
-namespace Hoo\ProductFeeds\Application\Controllers\Feed\KainotekaLt;
+namespace Hoo\ProductFeeds\Application\Controllers\ProductFeed\KainosLt;
 
 use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Domain;
 
-class Controller implements Application\Controllers\Feed\ControllerInterface
+class Controller implements Application\Controllers\ProductFeed\ControllerInterface
 {
 	public function __construct(
 	) {
@@ -13,7 +13,7 @@ class Controller implements Application\Controllers\Feed\ControllerInterface
 
 	public function path(): string
 	{
-		return 'kainoteka-lt.xml';
+		return 'kainos-lt.xml';
 	}
 
 	public function __invoke(): string

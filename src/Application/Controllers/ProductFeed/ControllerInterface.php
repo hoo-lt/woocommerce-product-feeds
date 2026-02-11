@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Application\Controllers\Feed;
+namespace Hoo\ProductFeeds\Application\Controllers\ProductFeed;
 
 interface ControllerInterface
 {

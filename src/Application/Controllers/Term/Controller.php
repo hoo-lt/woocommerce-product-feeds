@@ -8,8 +8,8 @@ use Hoo\ProductFeeds\Domain;
 class Controller implements ControllerInterface
 {
 	public function __construct(
-		protected readonly Application\Mappers\Term\Meta\MapperInterface $termMetaMapper,
-		protected readonly Application\Repositories\Term\Meta\RepositoryInterface $termMetaRepository,
+		protected readonly Application\Mappers\TermMeta\MapperInterface $termMetaMapper,
+		protected readonly Application\Repositories\TermMeta\RepositoryInterface $termMetaRepository,
 		protected readonly Application\TemplateInterface $template,
 	) {
 	}
@@ -40,11 +40,11 @@ class Controller implements ControllerInterface
 
 	public function add(int $id, string $value): void
 	{
-		$this->termMetaRepository->set($id, Domain\Term\Meta::from($value));
+		$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
 	}
 
 	public function edit(int $id, string $value): void
 	{
-		$this->termMetaRepository->set($id, Domain\Term\Meta::from($value));
+		$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
 	}
 }

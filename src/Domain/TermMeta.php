@@ -1,8 +1,8 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Term;
+namespace Hoo\ProductFeeds\Domain;
 
-enum Meta: string
+enum TermMeta: string
 {
 	public const KEY = 'product_feeds';
 

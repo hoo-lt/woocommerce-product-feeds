@@ -6,12 +6,12 @@ use Hoo\ProductFeeds\Application;
 
 class ActionHooks
 {
-	protected readonly array $feedControllers;
+	protected readonly array $productFeedControllers;
 
 	public function __construct(
-		Application\Controllers\Feed\ControllerInterface ...$feedControllers,
+		Application\Controllers\ProductFeed\ControllerInterface ...$productFeedControllers,
 	) {
-		$this->feedControllers = $feedControllers;
+		$this->productFeedControllers = $productFeedControllers;
 	}
 
 	public function __invoke(): void
@@ -37,9 +37,9 @@ class ActionHooks
 
 	public function add_feeds(): void
 	{
-		foreach ($this->feedControllers as $feedController) {
-			add_feed($feedController->path(), function () use ($feedController) {
-				echo $feedController();
+		foreach ($this->productFeedControllers as $productFeedController) {
+			add_feed($productFeedController->path(), function () use ($productFeedController) {
+				echo $productFeedController();
 			});
 		}
 	}
