@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\ProductFeeds\Application\Mappers\TermMeta;
+namespace Hoo\ProductFeeds\Application\Presenters\TermMeta;
 
 use Hoo\ProductFeeds\Domain;
 
-interface MapperInterface
+interface PresenterInterface
 {
 	public function label(Domain\TermMeta $termMeta): array;
 	public function labels(): array;

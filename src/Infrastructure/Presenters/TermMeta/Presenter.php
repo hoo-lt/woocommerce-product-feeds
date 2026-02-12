@@ -1,21 +1,21 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Mappers\TermMeta;
+namespace Hoo\ProductFeeds\Infrastructure\Presenters\TermMeta;
 
 use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Domain;
 
-class Mapper implements Application\Mappers\TermMeta\MapperInterface
+class Presenter implements Application\Presenters\TermMeta\PresenterInterface
 {
 	public function label(Domain\TermMeta $termMeta): array
 	{
 		return match ($termMeta) {
 			Domain\TermMeta::Included => [
-				'value' => Domain\TermMeta::Included->value,
+				'value' => $termMeta->value,
 				'label' => __('Included', 'woocommerce-product-feeds'),
 			],
 			Domain\TermMeta::Excluded => [
-				'value' => Domain\TermMeta::Excluded->value,
+				'value' => $termMeta->value,
 				'label' => __('Excluded', 'woocommerce-product-feeds')
 			],
 		};
@@ -33,11 +33,11 @@ class Mapper implements Application\Mappers\TermMeta\MapperInterface
 	{
 		return match ($termMeta) {
 			Domain\TermMeta::Included => [
-				'value' => Domain\TermMeta::Included->value,
+				'value' => $termMeta->value,
 				'icon' => 'status-completed',
 			],
 			Domain\TermMeta::Excluded => [
-				'value' => Domain\TermMeta::Excluded->value,
+				'value' => $termMeta->value,
 				'icon' => 'status-cancelled,'
 			],
 		};

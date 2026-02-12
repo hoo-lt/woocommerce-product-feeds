@@ -31,7 +31,7 @@ use Hoo\ProductFeeds\Infrastructure;
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
 	Application\Controllers\Term\ControllerInterface::class => DI\get(Application\Controllers\Term\Controller::class),
-	Application\Mappers\TermMeta\MapperInterface::class => DI\get(Infrastructure\Mappers\TermMeta\Mapper::class),
+	Application\Presenters\TermMeta\PresenterInterface::class => DI\get(Infrastructure\Presenters\TermMeta\Presenter::class),
 	Application\Template\TemplateInterface::class => DI\get(Infrastructure\Template\Template::class),
 
 	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),

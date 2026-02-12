@@ -8,7 +8,7 @@ use Hoo\ProductFeeds\Domain;
 class Controller implements ControllerInterface
 {
 	public function __construct(
-		protected readonly Application\Mappers\TermMeta\MapperInterface $termMetaMapper,
+		protected readonly Application\Presenters\TermMeta\PresenterInterface $termMetaPresenter,
 		protected readonly Domain\Repositories\TermMeta\RepositoryInterface $termMetaRepository,
 		protected readonly Application\Template\TemplateInterface $template,
 	) {
@@ -17,7 +17,7 @@ class Controller implements ControllerInterface
 	public function template(int $id): string
 	{
 		return ($this->template)('/Term', [
-			'icon' => $this->termMetaMapper->icon(
+			'icon' => $this->termMetaPresenter->icon(
 				$this->termMetaRepository->get($id)
 			)
 		]);
@@ -26,7 +26,7 @@ class Controller implements ControllerInterface
 	public function addTemplate(): string
 	{
 		return ($this->template)('/Term/Add', [
-			'labels' => $this->termMetaMapper->labels(),
+			'labels' => $this->termMetaPresenter->labels(),
 		]);
 	}
 
@@ -34,7 +34,7 @@ class Controller implements ControllerInterface
 	{
 		return ($this->template)('/Term/Edit', [
 			'value' => $this->termMetaRepository->get($id)->value,
-			'labels' => $this->termMetaMapper->labels(),
+			'labels' => $this->termMetaPresenter->labels(),
 		]);
 	}
 
