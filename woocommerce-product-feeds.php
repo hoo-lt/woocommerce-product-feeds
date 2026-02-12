@@ -30,21 +30,19 @@ use Hoo\ProductFeeds\Infrastructure;
 
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
-	Application\Controllers\Term\ControllerInterface::class => DI\get(Application\Controllers\Term\Controller::class),
-	Application\Presenters\TermMeta\PresenterInterface::class => DI\get(Infrastructure\Presenters\TermMeta\Presenter::class),
-	Application\Template\TemplateInterface::class => DI\get(Infrastructure\Template\Template::class),
-
 	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),
 	Domain\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
 
 	Infrastructure\Database\DatabaseInterface::class => DI\get(Infrastructure\Database\Database::class),
 
+	/*
 	Infrastructure\Hooks\ActionHooks::class => DI\create()
 		->constructor(
 			DI\get(Application\Controllers\ProductFeed\Kaina24Lt\Controller::class),
 			DI\get(Application\Controllers\ProductFeed\KainosLt\Controller::class),
 			DI\get(Application\Controllers\ProductFeed\KainotekaLt\Controller::class)
 		),
+	*/
 
 	wpdb::class => DI\factory(function (): wpdb {
 		global $wpdb;
@@ -60,7 +58,9 @@ $actionHooks();
 $filterHooks = $container->get(Infrastructure\Hooks\FilterHooks::class);
 $filterHooks();
 
-$productRepository = $container->get(Infrastructure\Repositories\Product\Repository::class);
-var_dump($productRepository());
+//$productRepository = $container->get(Domain\Repositories\Product\RepositoryInterface::class);
+//var_dump($productRepository->all());
 
-register_activation_hook(__FILE__, flush_rewrite_rules());
+register_activation_hook(__FILE__, function () {
+	flush_rewrite_rules();
+});

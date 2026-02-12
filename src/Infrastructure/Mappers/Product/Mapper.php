@@ -6,7 +6,7 @@ use Hoo\ProductFeeds\Domain;
 
 class Mapper
 {
-	public function __invoke(array $table): Domain\Products
+	public function all(array $table): Domain\Products
 	{
 		$products = new Domain\Products();
 

@@ -16,13 +16,13 @@ class Repository implements Domain\Repositories\Product\RepositoryInterface
 	) {
 	}
 
-	public function __invoke(): Domain\Products
+	public function all(): Domain\Products
 	{
 		$excludedTermTaxonomyIds = ($this->termTaxonomyMapper)($this->database->select(
 			$this->selectExcludedTermTaxonomyQuery
 		));
 
-		return ($this->productMapper)([
+		return $this->productMapper->all([
 			...$this->database->select(
 				$this->selectSimpleProductQuery
 					->exclude(...$excludedTermTaxonomyIds)

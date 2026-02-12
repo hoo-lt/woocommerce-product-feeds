@@ -13,7 +13,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 
 	public function __construct(
 		protected readonly wpdb $wpdb,
-		protected readonly string $filename = __DIR__ . '/Query.sql',
+		protected readonly string $path = __DIR__ . '/Query.sql',
 	) {
 		$this->initializeQuery();
 	}
@@ -28,11 +28,11 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 
 	protected function initializeQuery(): void
 	{
-		if (!file_exists($this->filename)) {
+		if (!file_exists($this->path)) {
 			//throw exception
 		}
 
-		$this->query = strtr(file_get_contents($this->filename), [
+		$this->query = strtr(file_get_contents($this->path), [
 			':term_taxonomy' => $this->wpdb->term_taxonomy,
 			':termmeta' => $this->wpdb->termmeta,
 		]);

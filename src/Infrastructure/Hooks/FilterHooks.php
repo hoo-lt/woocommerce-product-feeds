@@ -2,15 +2,14 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Hooks;
 
-use Hoo\ProductFeeds\Application;
 use Hoo\ProductFeeds\Domain;
-
+use Hoo\ProductFeeds\Presentation;
 use WP_Term;
 
 class FilterHooks
 {
 	public function __construct(
-		protected readonly Application\Controllers\Term\ControllerInterface $termController,
+		protected readonly Presentation\Presenters\Term\Presenter $termPresenter,
 	) {
 	}
 
@@ -54,28 +53,28 @@ class FilterHooks
 	public function manage_taxonomy_custom_column(string $string, string $column_name, int $term_id): string
 	{
 		return match ($column_name) {
-			'product_feeds' => $this->termController->template($term_id),
+			'product_feeds' => $this->termPresenter->view($term_id),
 			default => $string,
 		};
 	}
 
 	public function taxonomy_add_form_fields(string $taxonomy): void
 	{
-		echo $this->termController->addTemplate();
+		echo $this->termPresenter->addView();
 	}
 
 	public function taxonomy_edit_form_fields(WP_Term $tag, string $taxonomy): void
 	{
-		echo $this->termController->editTemplate($tag->term_id);
+		echo $this->termPresenter->editView($tag->term_id);
 	}
 
 	public function created_taxonomy(int $term_id, int $tt_id, array $args): void
 	{
-		$this->termController->add($term_id, $_POST['product_feeds']);
+		$this->termPresenter->add($term_id, $_POST['product_feeds']);
 	}
 
 	public function edited_taxonomy(int $term_id, int $tt_id, array $args): void
 	{
-		$this->termController->edit($term_id, $_POST['product_feeds']);
+		$this->termPresenter->edit($term_id, $_POST['product_feeds']);
 	}
 }

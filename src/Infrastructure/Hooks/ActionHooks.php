@@ -6,12 +6,12 @@ use Hoo\ProductFeeds\Application;
 
 class ActionHooks
 {
-	protected readonly array $productFeedControllers;
+	//protected readonly array $productFeedControllers;
 
 	public function __construct(
-		Application\Controllers\ProductFeed\ControllerInterface ...$productFeedControllers,
+		//Application\Controllers\ProductFeed\ControllerInterface ...$productFeedControllers,
 	) {
-		$this->productFeedControllers = $productFeedControllers;
+		//$this->productFeedControllers = $productFeedControllers;
 	}
 
 	public function __invoke(): void
@@ -21,10 +21,12 @@ class ActionHooks
 			'admin_enqueue_scripts'
 		], PHP_INT_MAX, 0);
 
+		/*
 		add_action('init', [
 			$this,
 			'add_feeds'
 		], PHP_INT_MAX, 0);
+		*/
 	}
 
 	public function admin_enqueue_scripts(): void
