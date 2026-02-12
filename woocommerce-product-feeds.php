@@ -24,12 +24,14 @@ require __DIR__ . '/vendor/autoload.php';
 
 const WOOCOMMERCE_PRODUCT_FEEDS = true;
 
-use Hoo\ProductFeeds\Application;
+use Hoo\ProductFeeds\Presentation;
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
 
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
+	Presentation\View\ViewInterface::class => DI\get(Presentation\View\View::class),
+
 	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),
 	Domain\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
 

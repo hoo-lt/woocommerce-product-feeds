@@ -8,9 +8,9 @@ use Hoo\ProductFeeds\Presentation;
 class Presenter
 {
 	public function __construct(
-		protected readonly Domain\Repositories\TermMeta\RepositoryInterface $termMetaRepository,
+		protected readonly Presentation\View\ViewInterface $view,
 		protected readonly Presentation\Mappers\TermMeta\Mapper $termMetaMapper,
-		protected readonly Presentation\View\View $view,
+		protected readonly Domain\Repositories\TermMeta\RepositoryInterface $termMetaRepository,
 	) {
 	}
 
