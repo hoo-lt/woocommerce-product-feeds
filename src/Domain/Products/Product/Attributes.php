@@ -10,6 +10,11 @@ class Attributes implements IteratorAggregate
 {
 	protected array $attributes = [];
 
+	public function has(int $id): bool
+	{
+		return isset($this->attributes[$id]);
+	}
+
 	public function get(int $id): Attributes\Attribute
 	{
 		if (!isset($this->attributes[$id])) {
@@ -17,11 +22,6 @@ class Attributes implements IteratorAggregate
 		}
 
 		return $this->attributes[$id];
-	}
-
-	public function has(int $id): bool
-	{
-		return isset($this->attributes[$id]);
 	}
 
 	public function add(Attributes\Attribute $attribute): void
@@ -33,7 +33,7 @@ class Attributes implements IteratorAggregate
 		$this->attributes[$attribute->id] = $attribute;
 	}
 
-	public function delete(int $id): void
+	public function remove(int $id): void
 	{
 		if (isset($this->attributes[$id])) {
 			return; //throw domain exception

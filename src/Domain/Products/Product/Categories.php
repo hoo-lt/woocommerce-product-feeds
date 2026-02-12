@@ -10,6 +10,11 @@ class Categories implements IteratorAggregate
 {
 	protected array $categories = [];
 
+	public function has(int $id): bool
+	{
+		return isset($this->categories[$id]);
+	}
+
 	public function get(int $id): Categories\Category
 	{
 		if (!isset($this->categories[$id])) {
@@ -17,11 +22,6 @@ class Categories implements IteratorAggregate
 		}
 
 		return $this->categories[$id];
-	}
-
-	public function has(int $id): bool
-	{
-		return isset($this->categories[$id]);
 	}
 
 	public function add(Categories\Category $category): void
@@ -33,7 +33,7 @@ class Categories implements IteratorAggregate
 		$this->categories[$category->id] = $category;
 	}
 
-	public function delete(int $id): void
+	public function remove(int $id): void
 	{
 		if (!isset($this->categories[$id])) {
 			return; //throw domain exception

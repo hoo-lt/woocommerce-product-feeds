@@ -10,6 +10,11 @@ class Terms implements IteratorAggregate
 {
 	protected array $terms = [];
 
+	public function has(int $id): bool
+	{
+		return isset($this->terms[$id]);
+	}
+
 	public function get(int $id): Terms\Term
 	{
 		if (!isset($this->terms[$id])) {
@@ -17,11 +22,6 @@ class Terms implements IteratorAggregate
 		}
 
 		return $this->terms[$id];
-	}
-
-	public function has(int $id): bool
-	{
-		return isset($this->terms[$id]);
 	}
 
 	public function add(Terms\Term $term): void
@@ -33,7 +33,7 @@ class Terms implements IteratorAggregate
 		$this->terms[$term->id] = $term;
 	}
 
-	public function delete(int $id): void
+	public function remove(int $id): void
 	{
 		if (isset($this->terms[$id])) {
 			return; //throw domain exception

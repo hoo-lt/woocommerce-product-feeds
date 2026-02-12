@@ -10,6 +10,11 @@ class Products implements IteratorAggregate
 {
 	protected array $products = [];
 
+	public function has(int $id): bool
+	{
+		return isset($this->products[$id]);
+	}
+
 	public function get(int $id): Products\Product
 	{
 		if (!isset($this->products[$id])) {
@@ -17,11 +22,6 @@ class Products implements IteratorAggregate
 		}
 
 		return $this->products[$id];
-	}
-
-	public function has(int $id): bool
-	{
-		return isset($this->products[$id]);
 	}
 
 	public function add(Products\Product $product): void
@@ -33,7 +33,7 @@ class Products implements IteratorAggregate
 		$this->products[$product->id] = $product;
 	}
 
-	public function delete(int $id): void
+	public function remove(int $id): void
 	{
 		if (!isset($this->products[$id])) {
 			return; //throw domain exception
