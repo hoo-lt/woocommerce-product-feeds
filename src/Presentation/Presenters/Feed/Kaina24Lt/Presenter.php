@@ -20,6 +20,8 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 
 	public function present(): string
 	{
+		header('Content-Type: application/xml; charset=utf-8');
+
 		return $this->kaina24LtMappers->all(
 			$this->productRepository->all(),
 		);

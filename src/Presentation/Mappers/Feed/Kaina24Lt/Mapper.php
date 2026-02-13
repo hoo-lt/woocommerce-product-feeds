@@ -40,8 +40,12 @@ class Mapper
 		$this->cdata('title', $product->name, $xmlWriter);
 		$this->text('price', (string) $product->price, $xmlWriter); //temp typecasting
 		$this->text('condition', 'new', $xmlWriter);
-		$this->text('stock', (string) $product->stock, $xmlWriter); //temp typecasting
-		$this->text('ean_code', $product->gtin, $xmlWriter);
+		if ($product->stock) {
+			$this->text('stock', (string) $product->stock, $xmlWriter); //temp typecasting
+		}
+		if ($product->gtin) {
+			$this->text('ean_code', $product->gtin, $xmlWriter);
+		}
 
 		$this->manufacturer($product->brands, $xmlWriter);
 		$this->category($product->categories, $xmlWriter);
@@ -75,7 +79,7 @@ class Mapper
 	{
 		$xmlWriter->startElement('spec');
 		$xmlWriter->writeAttribute('name', $attribute->name);
-		$xmlWriter->writeCData(implode(', ', $attribute->terms->all()));
+		$xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $attribute->terms->all())));
 		$xmlWriter->endElement();
 	}
 
