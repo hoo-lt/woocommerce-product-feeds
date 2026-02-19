@@ -1,7 +1,6 @@
-WITH RECURSIVE cte_term_taxonomy AS (
+WITH RECURSIVE cte AS (
 	SELECT
-		term_taxonomy.term_taxonomy_id,
-		term_taxonomy.term_id
+		term_taxonomy.term_taxonomy_id
 
 	FROM :term_taxonomy AS term_taxonomy
 
@@ -14,16 +13,15 @@ WITH RECURSIVE cte_term_taxonomy AS (
 	UNION ALL
 
 	SELECT
-		term_taxonomy.term_taxonomy_id,
-		term_taxonomy.term_id
+		term_taxonomy.term_taxonomy_id
 
 	FROM :term_taxonomy AS term_taxonomy
 
-	JOIN cte_term_taxonomy
-		ON cte_term_taxonomy.term_id = term_taxonomy.parent
+	JOIN cte
+		ON cte.term_taxonomy_id = term_taxonomy.parent
 )
 
 SELECT DISTINCT
 	term_taxonomy.term_taxonomy_id
 
-FROM cte_term_taxonomy AS term_taxonomy
+FROM cte AS term_taxonomy

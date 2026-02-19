@@ -5,7 +5,7 @@ namespace Hoo\ProductFeeds\Infrastructure\Repositories\Category;
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
 
-class Repository
+class Repository implements Domain\Repositories\Category\RepositoryInterface
 {
 	public function __construct(
 		protected readonly Infrastructure\Database\DatabaseInterface $database,

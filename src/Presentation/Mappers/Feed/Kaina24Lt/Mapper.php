@@ -7,33 +7,54 @@ use XMLWriter;
 
 class Mapper
 {
-	public function all(Domain\Products $products): string
-	{
+	public function all(
+		Domain\Brands $brands,
+		Domain\Categories $categories,
+		Domain\Products $products
+	): string {
 		$xmlWriter = new XMLWriter;
 		$xmlWriter->openMemory();
 
 		$xmlWriter->startDocument('1.0', 'UTF-8');
 
-		$this->products($products, $xmlWriter);
+		$this->products(
+			$brands,
+			$categories,
+			$products,
+			$xmlWriter
+		);
 
 		$xmlWriter->endDocument();
 
 		return $xmlWriter->outputMemory();
 	}
 
-	protected function products(Domain\Products $products, XMLWriter $xmlWriter): void
-	{
+	protected function products(
+		Domain\Brands $brands,
+		Domain\Categories $categories,
+		Domain\Products $products,
+		XMLWriter $xmlWriter
+	): void {
 		$xmlWriter->startElement('products');
 
 		foreach ($products as $product) {
-			$this->product($product, $xmlWriter);
+			$this->product(
+				$brands,
+				$categories,
+				$product,
+				$xmlWriter
+			);
 		}
 
 		$xmlWriter->endElement();
 	}
 
-	protected function product(Domain\Products\Product $product, XMLWriter $xmlWriter): void
-	{
+	protected function product(
+		Domain\Brands $brands,
+		Domain\Categories $categories,
+		Domain\Products\Product $product,
+		XMLWriter $xmlWriter
+	): void {
 		$xmlWriter->startElement('product');
 		$xmlWriter->writeAttribute('id', $product->id);
 
@@ -47,21 +68,49 @@ class Mapper
 			$this->text('ean_code', $product->gtin, $xmlWriter);
 		}
 
-		$this->manufacturer($product->brands, $xmlWriter);
-		$this->category($product->categories, $xmlWriter);
+		$brand = $product->brands->first();
+		if ($brand) {
+			$this->manufacturer(
+				$brands,
+				$brand,
+				$xmlWriter
+			);
+		}
+
+		$category = $product->categories->first();
+		if ($category) {
+			$this->category(
+				$categories,
+				$category,
+				$xmlWriter
+			);
+		}
+
 		$this->specs($product->attributes, $xmlWriter);
 
 		$xmlWriter->endElement();
 	}
 
-	protected function manufacturer(Domain\Products\Product\Brands $brands, XMLWriter $xmlWriter): void
-	{
-		$brand = $brands->first();
-		if (!$brand) {
-			return;
-		}
+	protected function manufacturer(
+		Domain\Brands $brands,
+		Domain\Products\Product\Brands\Brand $brand,
+		XMLWriter $xmlWriter
+	): void {
+		$brand = $brands->get($brand->id);
 
 		$this->cdata('manufacturer', $brand->name, $xmlWriter);
+	}
+
+	protected function category(
+		Domain\Categories $categories,
+		Domain\Products\Product\Categories\Category $category,
+		XMLWriter $xmlWriter
+	): void {
+		$category = $categories->get($category->id);
+
+		$this->text('category_id', $category->id, $xmlWriter);
+		$this->cdata('category_name', $category->name, $xmlWriter);
+		$this->cdata('category_link', $category->url, $xmlWriter);
 	}
 
 	protected function specs(Domain\Products\Product\Attributes $attributes, XMLWriter $xmlWriter): void
@@ -81,18 +130,6 @@ class Mapper
 		$xmlWriter->writeAttribute('name', $attribute->name);
 		$xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $attribute->terms->all())));
 		$xmlWriter->endElement();
-	}
-
-	protected function category(Domain\Products\Product\Categories $categories, XMLWriter $xmlWriter): void
-	{
-		$category = $categories->first();
-		if (!$category) {
-			return;
-		}
-
-		$this->text('category_id', $category->id, $xmlWriter);
-		$this->cdata('category_name', $category->name, $xmlWriter);
-		$this->cdata('category_link', $category->slug, $xmlWriter);
 	}
 
 	protected function cdata(string $name, string $content, XMLWriter $xmlWriter)

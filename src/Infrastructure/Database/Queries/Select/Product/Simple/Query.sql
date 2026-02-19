@@ -32,13 +32,11 @@ cte_posts AS (
 		AND cte_term_relationships.object_id IS NULL
 ),
 
-cte_terms AS (
+cte_term_taxonomy AS (
 	SELECT
 		term_relationships.object_id,
-		term_taxonomy.taxonomy,
-		terms.term_id,
-		terms.name,
-		terms.slug
+		term_taxonomy.term_taxonomy_id,
+		term_taxonomy.taxonomy
 
 	FROM cte_posts AS posts
 
@@ -46,12 +44,11 @@ cte_terms AS (
 		ON term_relationships.object_id = posts.ID
 	STRAIGHT_JOIN :term_taxonomy AS term_taxonomy
 		ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
-	STRAIGHT_JOIN :terms AS terms
-		ON terms.term_id = term_taxonomy.term_id
 
 	WHERE term_taxonomy.taxonomy IN (
 			'product_brand',
-			'product_cat'
+			'product_cat',
+			'product_tag'
 		)
 ),
 
@@ -94,12 +91,10 @@ SELECT
 	price.meta_value AS price,
 	stock.meta_value AS stock,
 	gtin.meta_value AS gtin,
-	brand.term_id AS brand_id,
-	brand.name AS brand_name,
-	brand.slug AS brand_slug,
-	category.term_id AS category_id,
-	category.name AS category_name,
-	category.slug AS category_slug,
+
+	brand.term_taxonomy_id AS brand_id,
+	category.term_taxonomy_id AS category_id,
+
 	attribute.attribute_id AS attribute_id,
 	attribute.attribute_label AS attribute_name,
 	attribute.attribute_name AS attribute_slug,
@@ -119,11 +114,13 @@ LEFT JOIN :postmeta AS stock
 LEFT JOIN :postmeta AS gtin
 	ON gtin.post_id = posts.ID
 	AND gtin.meta_key = '_global_unique_id'
-LEFT JOIN cte_terms AS brand
+
+LEFT JOIN cte_term_taxonomy AS brand
 	ON brand.object_id = posts.ID
 	AND brand.taxonomy = 'product_brand'
-LEFT JOIN cte_terms AS category
+LEFT JOIN cte_term_taxonomy AS category
 	ON category.object_id = posts.ID
 	AND category.taxonomy = 'product_cat'
+
 LEFT JOIN cte_attribute AS attribute
 	ON attribute.object_id = posts.ID

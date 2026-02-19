@@ -34,6 +34,8 @@ $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
 	Presentation\View\ViewInterface::class => DI\get(Presentation\View\View::class),
 
+	Domain\Repositories\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Brand\Repository::class),
+	Domain\Repositories\Category\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Category\Repository::class),
 	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),
 	Domain\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
 

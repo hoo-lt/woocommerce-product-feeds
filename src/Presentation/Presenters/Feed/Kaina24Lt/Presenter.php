@@ -8,6 +8,8 @@ use Hoo\ProductFeeds\Domain;
 class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 {
 	public function __construct(
+		protected readonly Domain\Repositories\Brand\RepositoryInterface $brandRepository,
+		protected readonly Domain\Repositories\Category\RepositoryInterface $categoryRepository,
 		protected readonly Domain\Repositories\Product\RepositoryInterface $productRepository,
 		protected readonly Presentation\Mappers\Feed\Kaina24Lt\Mapper $kaina24LtMappers,
 	) {
@@ -22,8 +24,14 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 	{
 		header('Content-Type: application/xml; charset=utf-8');
 
+		$brands = $this->brandRepository->all();
+		$categories = $this->categoryRepository->all();
+		$products = $this->productRepository->all();
+
 		return $this->kaina24LtMappers->all(
-			$this->productRepository->all(),
+			$brands,
+			$categories,
+			$products,
 		);
 	}
 }

@@ -32,7 +32,6 @@ class Mapper
 					$attribute = new Domain\Products\Product\Attributes\Attribute(
 						(int) $row['attribute_id'],
 						$row['attribute_name'],
-						$row['attribute_slug']
 					);
 					$product->attributes->add($attribute);
 				}
@@ -42,7 +41,6 @@ class Mapper
 						$attribute->terms->add(new Domain\Products\Product\Attributes\Attribute\Terms\Term(
 							(int) $row['term_id'],
 							$row['term_name'],
-							$row['term_slug']
 						));
 					}
 				}
@@ -52,8 +50,6 @@ class Mapper
 				if (!$product->brands->has((int) $row['brand_id'])) {
 					$product->brands->add(new Domain\Products\Product\Brands\Brand(
 						(int) $row['brand_id'],
-						$row['brand_name'],
-						$row['brand_slug']
 					));
 				}
 			}
@@ -62,8 +58,6 @@ class Mapper
 				if (!$product->categories->has((int) $row['category_id'])) {
 					$product->categories->add(new Domain\Products\Product\Categories\Category(
 						(int) $row['category_id'],
-						$row['category_name'],
-						$row['category_slug']
 					));
 				}
 			}

@@ -15,7 +15,7 @@ WITH RECURSIVE cte AS (
 	WHERE term_taxonomy.parent = 0
 		AND term_taxonomy.taxonomy = 'product_tag'
 
-	UNION
+	UNION ALL
 
 	SELECT
 		term_taxonomy.term_taxonomy_id,
@@ -34,7 +34,7 @@ WITH RECURSIVE cte AS (
 		ON cte.term_taxonomy_id = term_taxonomy.parent
 )
 
-SELECT
+SELECT DISTINCT
 	term_taxonomy_id AS id,
 	name,
 	CONCAT(%s, '/', %s, '/', url_path, '/') AS url
