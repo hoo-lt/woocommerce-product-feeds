@@ -64,6 +64,9 @@ $containerBuilder->addDefinitions([
 		global $wpdb;
 		return $wpdb;
 	}),
+	XMLWriter::class => DI\factory(function () {
+		return new XMLWriter();
+	}),
 ]);
 
 $container = $containerBuilder->build();
