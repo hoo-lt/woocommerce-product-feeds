@@ -10,7 +10,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 {
 	protected readonly string $query;
 
-	protected array $excludedTermTaxonomyIds = [];
+	protected array $postIds = [];
 
 	public function __construct(
 		protected readonly wpdb $wpdb,
@@ -19,10 +19,10 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		$this->initializeQuery();
 	}
 
-	public function exclude(int ...$termTaxonomyIds): self
+	public function postIds(int ...$postIds): self
 	{
 		$clone = clone $this;
-		$clone->excludedTermTaxonomyIds = $termTaxonomyIds;
+		$clone->postIds = $postIds;
 
 		return $clone;
 	}
@@ -30,9 +30,9 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 	public function __invoke(): string
 	{
 		return $this->wpdb->prepare(strtr($this->query, [
-			':WHERE' => $this->excludedTermTaxonomyIds ? 'WHERE term_relationships.term_taxonomy_id IN (' . implode(',', array_map(fn() => '%d', $this->excludedTermTaxonomyIds)) . ')' : '',
+			':AND posts.ID IN ()' => $this->postIds ? 'AND posts.ID IN (' . implode(',', array_map(fn() => '%d', $this->postIds)) . ')' : '',
 		]), [
-			...$this->excludedTermTaxonomyIds,
+			...$this->postIds,
 		]);
 	}
 

@@ -9,23 +9,23 @@ class Repository implements Domain\Repositories\Product\RepositoryInterface
 {
 	public function __construct(
 		protected readonly Infrastructure\Database\DatabaseInterface $database,
-		protected readonly Infrastructure\Database\Queries\Select\TermRelationships\Excluded\Query $selectExcludedTermRelationshipsQuery,
+		protected readonly Infrastructure\Database\Queries\Select\TermRelationship\Query $selectTermRelationshipQuery,
 		protected readonly Infrastructure\Database\Queries\Select\Product\Simple\Query $selectSimpleProductQuery,
-		protected readonly Infrastructure\Mappers\TermRelationships\Mapper $termRelationshipsMapper,
+		protected readonly Infrastructure\Mappers\TermRelationship\Mapper $termRelationshipMapper,
 		protected readonly Infrastructure\Mappers\Product\Mapper $productMapper,
 	) {
 	}
 
 	public function all(): Domain\Products
 	{
-		$excludedTermRelationshipsIds = ($this->termRelationshipsMapper)($this->database->select(
-			$this->selectExcludedTermRelationshipsQuery
+		$termRelationshipObjectIds = $this->termRelationshipMapper->objectIds($this->database->select(
+			$this->selectTermRelationshipQuery
 		));
 
 		return $this->productMapper->all([
 			...$this->database->select(
 				$this->selectSimpleProductQuery
-					->exclude(...$excludedTermRelationshipsIds)
+					->postIds(...$termRelationshipObjectIds)
 			),
 		]);
 	}

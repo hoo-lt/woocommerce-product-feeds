@@ -1,8 +1,8 @@
 WITH cte_posts AS (
 	SELECT
-		posts.ID,
-		posts.post_title,
-		posts.post_name
+		posts.ID AS id,
+		posts.post_title AS name,
+		posts.post_name AS slug
 
 	FROM :posts AS posts
 
@@ -17,21 +17,19 @@ WITH cte_posts AS (
 
 	WHERE posts.post_type = 'product'
 		AND posts.post_status = 'publish'
-		AND posts.ID IN (
-			...
-		)
+		:AND posts.ID IN ()
 ),
 
 cte_term_taxonomy AS (
 	SELECT
-		term_relationships.object_id,
+		cte_posts.id AS post_id,
 		term_taxonomy.term_taxonomy_id,
 		term_taxonomy.taxonomy
 
-	FROM cte_posts AS posts
+	FROM cte_posts
 
 	STRAIGHT_JOIN :term_relationships AS term_relationships
-		ON term_relationships.object_id = posts.ID
+		ON term_relationships.object_id = cte_posts.id
 	STRAIGHT_JOIN :term_taxonomy AS term_taxonomy
 		ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
 
@@ -53,7 +51,7 @@ cte_woocommerce_attribute_taxonomies AS (
 
 cte_attribute AS (
 	SELECT
-		term_relationships.object_id,
+		cte_posts.id AS post_id,
 		term_taxonomy.taxonomy,
 		terms.term_id,
 		terms.name,
@@ -62,10 +60,10 @@ cte_attribute AS (
 		woocommerce_attribute_taxonomies.attribute_name,
 		woocommerce_attribute_taxonomies.attribute_label
 
-	FROM cte_posts AS posts
+	FROM cte_posts
 
 	STRAIGHT_JOIN :term_relationships AS term_relationships
-		ON term_relationships.object_id = posts.ID
+		ON term_relationships.object_id = cte_posts.id
 	STRAIGHT_JOIN :term_taxonomy AS term_taxonomy
 		ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
 	STRAIGHT_JOIN :terms AS terms
@@ -75,9 +73,9 @@ cte_attribute AS (
 )
 
 SELECT
-	posts.ID AS id,
-	posts.post_title AS name,
-	posts.post_name AS slug,
+	cte_posts.id,
+	cte_posts.name,
+	cte_posts.slug,
 	price.meta_value AS price,
 	stock.meta_value AS stock,
 	gtin.meta_value AS gtin,
@@ -92,25 +90,25 @@ SELECT
 	attribute.name AS term_name,
 	attribute.slug AS term_slug
 
-FROM cte_posts AS posts
+FROM cte_posts
 
 JOIN :postmeta AS price
-	ON price.post_id = posts.ID
+	ON price.post_id = cte_posts.id
 	AND price.meta_key = '_price'
 
 LEFT JOIN :postmeta AS stock
-	ON stock.post_id = posts.ID
+	ON stock.post_id = cte_posts.id
 	AND stock.meta_key = '_stock'
 LEFT JOIN :postmeta AS gtin
-	ON gtin.post_id = posts.ID
+	ON gtin.post_id = cte_posts.id
 	AND gtin.meta_key = '_global_unique_id'
 
 LEFT JOIN cte_term_taxonomy AS brand
-	ON brand.object_id = posts.ID
+	ON brand.post_id = cte_posts.id
 	AND brand.taxonomy = 'product_brand'
 LEFT JOIN cte_term_taxonomy AS category
-	ON category.object_id = posts.ID
+	ON category.post_id = cte_posts.id
 	AND category.taxonomy = 'product_cat'
 
 LEFT JOIN cte_attribute AS attribute
-	ON attribute.object_id = posts.ID
+	ON attribute.post_id = cte_posts.id

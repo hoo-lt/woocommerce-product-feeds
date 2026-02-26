@@ -2,7 +2,8 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select;
 
-interface QueryInterface
+use Hoo\ProductFeeds\Infrastructure;
+
+interface QueryInterface extends Infrastructure\Database\Queries\QueryInterface
 {
-	public function __invoke(): string;
 }

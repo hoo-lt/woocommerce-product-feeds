@@ -29,7 +29,7 @@ class Database implements DatabaseInterface
 		return $value;
 	}
 
-	protected function key(Queries\Select\QueryInterface $query): string
+	protected function key(Queries\QueryInterface $query): string
 	{
 		return md5($query());
 	}

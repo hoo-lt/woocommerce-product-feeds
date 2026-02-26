@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\TermRelationships\Excluded;
+namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\TermRelationship;
 
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
