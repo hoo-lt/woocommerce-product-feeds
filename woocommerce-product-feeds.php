@@ -60,13 +60,12 @@ $containerBuilder->addDefinitions([
 		...apply_filters('woocommerce_product_feeds_add_feed_presenters', []),
 	])),
 
-	wpdb::class => DI\factory(function (): wpdb {
+	wpdb::class => DI\factory(function () {
 		global $wpdb;
 		return $wpdb;
 	}),
-	XMLWriter::class => DI\factory(function () {
-		return new XMLWriter();
-	}),
+
+	XMLWriter::class => DI\factory(fn() => new XMLWriter()),
 ]);
 
 $container = $containerBuilder->build();

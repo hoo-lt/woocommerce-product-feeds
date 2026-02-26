@@ -1,6 +1,7 @@
 WITH RECURSIVE cte_term_taxonomy AS (
 	SELECT
-		term_taxonomy.term_taxonomy_id
+		term_taxonomy.term_taxonomy_id,
+		term_taxonomy.term_id
 
 	FROM :term_taxonomy AS term_taxonomy
 
@@ -13,22 +14,30 @@ WITH RECURSIVE cte_term_taxonomy AS (
 	UNION ALL
 
 	SELECT
-		term_taxonomy.term_taxonomy_id
+		term_taxonomy.term_taxonomy_id,
+		term_taxonomy.term_id
 
 	FROM :term_taxonomy AS term_taxonomy
 
 	JOIN cte_term_taxonomy
-		ON cte_term_taxonomy.term_taxonomy_id = term_taxonomy.parent
+		ON cte_term_taxonomy.term_id = term_taxonomy.parent
 )
 
-SELECT DISTINCT
-	term_relationships.object_id
+SELECT
+	object_id
 
-FROM :term_relationships AS term_relationships
+FROM :term_relationships
 
-WHERE term_relationships.term_taxonomy_id NOT IN (
+EXCEPT
+
+SELECT
+	object_id
+
+FROM :term_relationships
+
+WHERE term_taxonomy_id IN (
 	SELECT
-		cte_term_taxonomy.term_taxonomy_id
+		term_taxonomy_id
 
 	FROM cte_term_taxonomy
-)
+);

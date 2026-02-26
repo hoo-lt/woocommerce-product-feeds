@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\TermTaxonomy\Excluded;
+namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\TermRelationships\Excluded;
 
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
@@ -36,6 +36,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		$this->query = strtr(file_get_contents($path), [
 			':term_taxonomy' => $this->wpdb->term_taxonomy,
 			':termmeta' => $this->wpdb->termmeta,
+			':term_relationships' => $this->wpdb->term_relationships,
 		]);
 	}
 }
