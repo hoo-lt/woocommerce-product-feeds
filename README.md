@@ -1,8 +1,9 @@
 # WooCommerce Product Feeds by HOO
 
-A lightweight WordPress plugin that generates XML product feeds for WooCommerce stores. The
-library is built with clean architecture principles (domain, infrastructure, presentation) and
-is easy to extend with custom feed presenters.
+A lightweight WordPress plugin that generates XML product feeds for WooCommerce stores.
+The project emphasises a clean, testable architecture and ships with ready-to-use domain
+models, concrete repository implementations and XML mappers so you can build custom feeds
+quickly and reliably.
 
 ---
 
@@ -11,8 +12,7 @@ is easy to extend with custom feed presenters.
 - Registers custom feeds via `add_feed()` on WordPress `init`.
 - Exposes product data (brands, categories, attributes, stock, GTIN, etc.) in XML format
 	suitable for external marketplaces or comparison engines.
-- Adds a **Product feeds** column and term‑meta controls to all taxonomies defined by
-	WooCommerce (categories, tags, brands, etc.).
+- Adds small, optional admin helpers for configuring feed-related term meta.
 - Provides a DI container with sensible defaults for repositories, mappers, and view handling.
 
 Out of the box the plugin ships with a single feed presenter targeting the **Kaina24.lt** format.
@@ -41,23 +41,49 @@ Everything is resolved through [PHP-DI](https://php-di.org/) which allows inject
 
 ---
 
-## ✨ Extending with new feed presenters
+## ✨ Strong points (why use this plugin)
 
-Feed presenters are responsible for returning an XML string and providing a path used by `add_feed()`.
+- Clean architecture: domain, infrastructure and presentation layers keep feed logic
+	decoupled and testable.
+- Ready domain models and aggregates: `Domain\Products`, `Domain\Brands`, `Domain\Categories`
+	and `Domain\TermMeta` provide rich objects (not raw arrays) so presenters operate on
+	meaningful types.
+- Concrete repositories out of the box: `Infrastructure\Repositories\Product\Repository`,
+	`Brand\Repository`, `Category\Repository`, `TermMeta\Repository` — these perform the
+	DB queries and map rows to domain objects.
+- XML mappers: presentation mappers (for example `Presentation\Mappers\Feed\Kaina24Lt\Mapper`)
+	encapsulate XML generation using `XMLWriter` so you can reuse or extend them.
+- DI-ready: plugin bootstrap uses `PHP-DI` so you can override or add implementations
+	via the container or by supplying presenters through the provided filter.
 
-### 1. Create a presenter
+## ✨ Extending with new feed presenters (recommended)
 
-Implement `\Hoo\ProductFeeds\Presentation\Presenters\Feed\PresenterInterface`:
+The recommended way to create new feeds is to implement
+`Presentation\Presenters\Feed\PresenterInterface`, inject the built-in repositories and
+mappers, then return XML from `present()` and a unique string from `path()`.
+
+Key building blocks you will likely use:
+
+- `Domain\Repositories\Product\RepositoryInterface` — returns `Domain\Products` with
+	`Domain\Products\Product` items (prices, stock, GTIN, attributes, relationships).
+- `Domain\Repositories\Brand\RepositoryInterface` and `Domain\Repositories\Category\RepositoryInterface`
+	— provide lookup and listing for brand and category domain objects.
+- `Presentation\Mappers\Feed\*` — mappers that build XML from domain aggregates using `XMLWriter`.
+
+Example presenter that reuses built-in repositories and a mapper:
 
 ```php
 use Hoo\ProductFeeds\Presentation\Presenters\Feed\PresenterInterface;
-use Hoo\ProductFeeds\Domain; // for repositories etc.
+use Hoo\ProductFeeds\Domain;
+use Hoo\ProductFeeds\Presentation\Mappers\Feed\Kaina24Lt\Mapper as XmlMapper;
 
-class MyMarketplacePresenter implements PresenterInterface
+class MyMarketPresenter implements PresenterInterface
 {
 		public function __construct(
-				Domain\Repositories\Product\RepositoryInterface $productRepo,
-				// ... other dependencies
+				protected Domain\Repositories\Product\RepositoryInterface $products,
+				protected Domain\Repositories\Brand\RepositoryInterface $brands,
+				protected Domain\Repositories\Category\RepositoryInterface $categories,
+				protected XmlMapper $xmlMapper,
 		) {}
 
 		public function path(): string
@@ -68,45 +94,31 @@ class MyMarketplacePresenter implements PresenterInterface
 		public function present(): string
 		{
 				header('Content-Type: application/xml; charset=utf-8');
-				// build XML using mappers or manually
-				return '<feed>…</feed>';
+				return $this->xmlMapper->all(
+						$this->brands->all(),
+						$this->categories->all(),
+						$this->products->all(),
+				);
 		}
 }
 ```
 
-Alternatively, extend an existing mapper or create a completely new one under
-`src/Presentation/Mappers/Feed/…`.
+Registering your presenter
 
-### 2. Register the presenter via filter
-
-The bootstrap file applies a filter when building the `ActionHooks` object:
-
-```php
-apply_filters('woocommerce_product_feeds_add_feed_presenters', []);
-```
-
-You can add your presenter in your theme or another plugin:
+The plugin's bootstrap constructs `Infrastructure\Hooks\ActionHooks` with default presenters
+and merges additional presenters returned by the `woocommerce_product_feeds_add_feed_presenters`
+filter. You can register presenters by returning them from that filter (or by altering the
+DI container in more advanced use cases).
 
 ```php
-function my_plugin_add_feed_presenter() {
-		return [
-				new \My\Namespace\MyMarketplacePresenter(),
-		];
+function my_add_feed_presenters(array $presenters) {
+		$presenters[] = new \My\Namespace\MyMarketPresenter(/* deps */);
+		return $presenters;
 }
-add_filter('woocommerce_product_feeds_add_feed_presenters', 'my_plugin_add_feed_presenter');
+add_filter('woocommerce_product_feeds_add_feed_presenters', 'my_add_feed_presenters');
 ```
 
-Because the DI container is in use, you may prefer to register your presenter through the
-container or use `DI\factory` to resolve it.
-
-### 3. Clear rewrite rules
-
-Flush rewrites (either programmatically with `flush_rewrite_rules()` or by re-saving permalinks)
-so that your new feed path is recognised.
-
-### 4. Test the feed
-
-Visit `https://your-site.com/?feed=my-marketplace.xml` or the appropriate rewrite-friendly URL.
+After registering, flush rewrite rules or re-save permalinks so the feed path becomes active.
 
 ---
 
