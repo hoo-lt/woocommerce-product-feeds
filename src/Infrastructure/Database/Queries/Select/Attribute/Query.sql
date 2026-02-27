@@ -1,0 +1,6 @@
+SELECT
+	woocommerce_attribute_taxonomies.attribute_id AS id,
+	woocommerce_attribute_taxonomies.attribute_name AS slug,
+	woocommerce_attribute_taxonomies.attribute_label AS name
+
+FROM :woocommerce_attribute_taxonomies AS woocommerce_attribute_taxonomies
