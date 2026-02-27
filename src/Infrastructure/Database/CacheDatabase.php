@@ -4,7 +4,7 @@ namespace Hoo\ProductFeeds\Infrastructure\Database;
 
 use Hoo\ProductFeeds\Infrastructure;
 
-class Database implements DatabaseInterface
+class CacheDatabase implements DatabaseInterface
 {
 	public function __construct(
 		protected readonly Infrastructure\Cache\Cache $cache,
