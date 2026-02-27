@@ -42,6 +42,7 @@ class ActionHooks
 		foreach ($this->feedPresenters as $feedPresenter) {
 			add_feed($feedPresenter->path(), function () use ($feedPresenter) {
 				echo $this->pipeline
+					->middlewares()
 					->object($feedPresenter)
 				(fn($feedPresenter) => $feedPresenter->present());
 			});
