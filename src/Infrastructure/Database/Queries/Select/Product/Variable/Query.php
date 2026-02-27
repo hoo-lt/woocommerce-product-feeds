@@ -30,7 +30,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 	public function __invoke(): string
 	{
 		return $this->wpdb->prepare(strtr($this->query, [
-			':AND posts.ID IN ()' => $this->postIds ? 'AND posts.ID IN (' . implode(',', array_map(fn() => '%d', $this->postIds)) . ')' : '',
+			':AND posts.post_parent IN ()' => $this->postIds ? 'AND posts.post_parent IN (' . implode(',', array_map(fn() => '%d', $this->postIds)) . ')' : '',
 		]), [
 			...$this->postIds,
 		]);

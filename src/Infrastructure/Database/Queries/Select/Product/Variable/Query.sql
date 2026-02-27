@@ -8,7 +8,7 @@ WITH cte_posts AS (
     -- Проверяем, что это вариация и что она опубликована
     WHERE posts.post_type = 'product_variation'
         AND posts.post_status = 'publish'
-        :AND posts.ID IN ()
+        :AND posts.post_parent IN ()
 ),
 
 cte_term_taxonomy AS (

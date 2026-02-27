@@ -45,7 +45,7 @@ class ActionHooks
 				function () use ($feedPresenter) {
 					$responce = $this->pipeline
 						->middlewares(
-							Infrastructure\Middlewares\Log\Middleware::class,
+							Infrastructure\Middlewares\ExecutionTime\Middleware::class,
 						)
 						->object($feedPresenter)
 					(fn($feedPresenter) => $feedPresenter->present());

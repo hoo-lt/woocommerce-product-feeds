@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Middlewares\WooCommerce\Logger;
+namespace Hoo\ProductFeeds\Infrastructure\Middlewares\ExecutionTime;
 
 use Hoo\ProductFeeds\Infrastructure;
 use WC_Logger_Interface;
