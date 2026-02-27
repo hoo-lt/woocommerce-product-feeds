@@ -42,6 +42,10 @@ class Pipeline
 
 	public function __invoke(callable $callable): mixed
 	{
+		if (!$this->object) {
+			//throw there
+		}
+
 		return array_reduce(array_reverse($this->middlewares), fn($callable, $middleware) => fn($object) => $middleware($object, $callable), $callable)($this->object);
 	}
 }
