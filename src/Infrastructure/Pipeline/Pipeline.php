@@ -18,36 +18,30 @@ class Pipeline
 
 	public function object(object $object): self
 	{
-		$this->object = $object;
-		return $this;
-	}
+		$clone = clone $this;
+		$clone->object = $object;
 
-	public function middleware(string $middleware): self
-	{
-		$this->add($middleware);
-		return $this;
+		return $clone;
 	}
 
 	public function middlewares(string ...$middlewares): self
 	{
+		$clone = clone $this;
+
 		foreach ($middlewares as $middleware) {
-			$this->add($middleware);
+			$middleware = $this->container->get($middleware);
+			if (!$middleware instanceof Infrastructure\Middlewares\MiddlewareInterface) {
+				//throw there
+			}
+
+			$clone->middlewares[] = $middleware;
 		}
-		return $this;
+
+		return $clone;
 	}
 
 	public function __invoke(callable $callable): mixed
 	{
 		return array_reduce(array_reverse($this->middlewares), fn($callable, $middleware) => fn($object) => $middleware($object, $callable), $callable)($this->object);
-	}
-
-	protected function add(string $middleware): void
-	{
-		$middleware = $this->container->get($middleware);
-		if (!$middleware instanceof Infrastructure\Middlewares\MiddlewareInterface) {
-			//throw there
-		}
-
-		$this->middlewares[] = $middleware;
 	}
 }
