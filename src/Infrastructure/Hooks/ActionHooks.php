@@ -41,8 +41,7 @@ class ActionHooks
 	{
 		foreach ($this->feedPresenters as $feedPresenter) {
 			add_feed($feedPresenter->path(), function () use ($feedPresenter) {
-				$this->pipeline
-					//->middlewares(Auth::class, Log::class)
+				echo $this->pipeline
 					->object($feedPresenter)
 				(fn($feedPresenter) => $feedPresenter->present());
 			});

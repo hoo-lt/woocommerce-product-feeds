@@ -7,9 +7,9 @@ use Psr\Container\ContainerInterface;
 
 class Pipeline
 {
-	protected array $middlewares = [];
-
 	protected object $object;
+
+	protected array $middlewares = [];
 
 	public function __construct(
 		protected readonly ContainerInterface $container,
