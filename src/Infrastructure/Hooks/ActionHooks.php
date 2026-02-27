@@ -2,6 +2,7 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Hooks;
 
+use Hoo\ProductFeeds\Infrastructure;
 use Hoo\ProductFeeds\Presentation;
 
 class ActionHooks
@@ -9,6 +10,7 @@ class ActionHooks
 	protected readonly array $feedPresenters;
 
 	public function __construct(
+		protected readonly Infrastructure\Pipeline\Pipeline $pipeline,
 		Presentation\Presenters\Feed\PresenterInterface ...$feedPresenters,
 	) {
 		$this->feedPresenters = $feedPresenters;
@@ -39,7 +41,10 @@ class ActionHooks
 	{
 		foreach ($this->feedPresenters as $feedPresenter) {
 			add_feed($feedPresenter->path(), function () use ($feedPresenter) {
-				echo $feedPresenter->present();
+				$this->pipeline
+					//->middlewares(Auth::class, Log::class)
+					->object($feedPresenter)
+				(fn($feedPresenter) => $feedPresenter->present());
 			});
 		}
 	}

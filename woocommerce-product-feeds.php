@@ -60,6 +60,8 @@ $containerBuilder->addDefinitions([
 		...apply_filters('woocommerce_product_feeds_add_feed_presenters', []),
 	])),
 
+	Infrastructure\Http\Request::class => DI\factory(fn() => new Infrastructure\Http\Request($_GET, $_POST)),
+
 	wpdb::class => DI\factory(function () {
 		global $wpdb;
 		return $wpdb;
