@@ -4,6 +4,8 @@ namespace Hoo\ProductFeeds\Presentation\Presenters\Feed\Kaina24Lt;
 
 use Hoo\ProductFeeds\Presentation;
 use Hoo\ProductFeeds\Domain;
+use Hoo\ProductFeeds\Infrastructure;
+
 
 class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 {
@@ -20,13 +22,17 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 		return 'kaina24-lt.xml';
 	}
 
-	public function present(): string
+	public function present(): Infrastructure\Http\Response
 	{
-		header('Content-Type: application/xml; charset=utf-8');
-		return $this->kaina24LtMappers->all(
-			$this->brandRepository->all(),
-			$this->categoryRepository->all(),
-			$this->productRepository->all(),
+		return new Infrastructure\Http\Response(
+			[
+				'Content-Type: application/xml; charset=utf-8'
+			],
+			$this->kaina24LtMappers->all(
+				$this->brandRepository->all(),
+				$this->categoryRepository->all(),
+				$this->productRepository->all(),
+			)
 		);
 	}
 }

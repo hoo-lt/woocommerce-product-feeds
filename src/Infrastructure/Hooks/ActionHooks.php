@@ -40,12 +40,14 @@ class ActionHooks
 	public function add_feeds(): void
 	{
 		foreach ($this->feedPresenters as $feedPresenter) {
-			add_feed($feedPresenter->path(), function () use ($feedPresenter) {
-				echo $this->pipeline
+			add_feed(
+				$feedPresenter->path(),
+				$this->pipeline
 					->middlewares()
 					->object($feedPresenter)
-				(fn($feedPresenter) => $feedPresenter->present());
-			});
+				(fn($feedPresenter) => $feedPresenter->present())
+				()
+			);
 		}
 	}
 }
