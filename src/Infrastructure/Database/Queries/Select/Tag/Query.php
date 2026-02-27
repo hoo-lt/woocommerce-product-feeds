@@ -16,7 +16,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		protected readonly string $permalink,
 		protected readonly string $path = __DIR__,
 	) {
-		$this->initializeQuery();
+		$this->initialize();
 	}
 
 	public function __invoke(): string
@@ -27,7 +27,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		]);
 	}
 
-	protected function initializeQuery(): void
+	protected function initialize(): void
 	{
 		$path = "{$this->path}/Query.sql";
 		if (!file_exists($path)) {

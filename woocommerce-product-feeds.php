@@ -34,9 +34,11 @@ $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([
 	Presentation\View\ViewInterface::class => DI\get(Presentation\View\View::class),
 
+	Domain\Repositories\Attribute\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Attribute\Repository::class),
 	Domain\Repositories\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Brand\Repository::class),
 	Domain\Repositories\Category\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Category\Repository::class),
 	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),
+	Domain\Repositories\Term\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Term\Repository::class),
 	Domain\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
 
 	Infrastructure\Database\DatabaseInterface::class => DI\get(Infrastructure\Database\Database::class),
@@ -71,6 +73,8 @@ $containerBuilder->addDefinitions([
 	}),
 
 	XMLWriter::class => DI\factory(fn() => new XMLWriter()),
+
+	WC_Logger_Interface::class => DI\factory(fn() => wc_get_logger()),
 ]);
 
 $container = $containerBuilder->build();

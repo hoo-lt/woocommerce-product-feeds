@@ -2,7 +2,6 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Database\Queries\Select\Attribute;
 
-use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Infrastructure;
 
 use wpdb;
@@ -15,18 +14,15 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		protected readonly wpdb $wpdb,
 		protected readonly string $path = __DIR__,
 	) {
-		$this->initializeQuery();
+		$this->initialize();
 	}
 
 	public function __invoke(): string
 	{
-		return $this->wpdb->prepare($this->query, [
-			Domain\TermMeta::KEY,
-			Domain\TermMeta::Excluded->value,
-		]);
+		return $this->wpdb->prepare($this->query);
 	}
 
-	protected function initializeQuery(): void
+	protected function initialize(): void
 	{
 		$path = "{$this->path}/Query.sql";
 		if (!file_exists($path)) {
@@ -34,9 +30,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		}
 
 		$this->query = strtr(file_get_contents($path), [
-			':term_taxonomy' => $this->wpdb->term_taxonomy,
-			':termmeta' => $this->wpdb->termmeta,
-			':term_relationships' => $this->wpdb->term_relationships,
+			':woocommerce_attribute_taxonomies' => $this->wpdb->prefix . 'woocommerce_attribute_taxonomies',
 		]);
 	}
 }

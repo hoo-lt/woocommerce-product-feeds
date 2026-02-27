@@ -24,6 +24,7 @@ cte_term_taxonomy AS (
 	SELECT
 		cte_posts.id AS post_id,
 		term_taxonomy.term_taxonomy_id,
+		term_taxonomy.term_id,
 		term_taxonomy.taxonomy
 
 	FROM cte_posts
@@ -32,44 +33,6 @@ cte_term_taxonomy AS (
 		ON term_relationships.object_id = cte_posts.id
 	STRAIGHT_JOIN :term_taxonomy AS term_taxonomy
 		ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
-
-	WHERE term_taxonomy.taxonomy IN (
-			'product_brand',
-			'product_cat',
-			'product_tag'
-		)
-),
-
-cte_woocommerce_attribute_taxonomies AS (
-	SELECT
-		woocommerce_attribute_taxonomies.attribute_id,
-		CONCAT('pa_', woocommerce_attribute_taxonomies.attribute_name) AS attribute_name,
-		woocommerce_attribute_taxonomies.attribute_label
-
-	FROM :woocommerce_attribute_taxonomies AS woocommerce_attribute_taxonomies
-),
-
-cte_attribute AS (
-	SELECT
-		cte_posts.id AS post_id,
-		term_taxonomy.taxonomy,
-		terms.term_id,
-		terms.name,
-		terms.slug,
-		woocommerce_attribute_taxonomies.attribute_id,
-		woocommerce_attribute_taxonomies.attribute_name,
-		woocommerce_attribute_taxonomies.attribute_label
-
-	FROM cte_posts
-
-	STRAIGHT_JOIN :term_relationships AS term_relationships
-		ON term_relationships.object_id = cte_posts.id
-	STRAIGHT_JOIN :term_taxonomy AS term_taxonomy
-		ON term_taxonomy.term_taxonomy_id = term_relationships.term_taxonomy_id
-	STRAIGHT_JOIN :terms AS terms
-		ON terms.term_id = term_taxonomy.term_id
-	STRAIGHT_JOIN cte_woocommerce_attribute_taxonomies AS woocommerce_attribute_taxonomies
-		ON woocommerce_attribute_taxonomies.attribute_name = term_taxonomy.taxonomy
 )
 
 SELECT
@@ -83,12 +46,8 @@ SELECT
 	brand.term_taxonomy_id AS brand_id,
 	category.term_taxonomy_id AS category_id,
 
-	attribute.attribute_id AS attribute_id,
-	attribute.attribute_label AS attribute_name,
-	attribute.attribute_name AS attribute_slug,
-	attribute.term_id AS term_id,
-	attribute.name AS term_name,
-	attribute.slug AS term_slug
+	attribute.taxonomy AS attribute_taxonomy,
+	attribute.term_id AS term_id
 
 FROM cte_posts
 
@@ -110,5 +69,10 @@ LEFT JOIN cte_term_taxonomy AS category
 	ON category.post_id = cte_posts.id
 	AND category.taxonomy = 'product_cat'
 
-LEFT JOIN cte_attribute AS attribute
+LEFT JOIN cte_term_taxonomy AS attribute
 	ON attribute.post_id = cte_posts.id
+	AND attribute.taxonomy NOT IN (
+		'product_brand',
+		'product_cat',
+		'product_tag'
+	)

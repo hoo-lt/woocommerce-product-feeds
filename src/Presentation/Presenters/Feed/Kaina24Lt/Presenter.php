@@ -10,9 +10,11 @@ use Hoo\ProductFeeds\Infrastructure;
 class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 {
 	public function __construct(
+		protected readonly Domain\Repositories\Attribute\RepositoryInterface $attributeRepository,
 		protected readonly Domain\Repositories\Brand\RepositoryInterface $brandRepository,
 		protected readonly Domain\Repositories\Category\RepositoryInterface $categoryRepository,
 		protected readonly Domain\Repositories\Product\RepositoryInterface $productRepository,
+		protected readonly Domain\Repositories\Term\RepositoryInterface $termRepository,
 		protected readonly Presentation\Mappers\Feed\Kaina24Lt\Mapper $kaina24LtMappers,
 	) {
 	}
@@ -40,9 +42,11 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 	protected function body(): string
 	{
 		return $this->kaina24LtMappers->all(
+			$this->attributeRepository->all(),
 			$this->brandRepository->all(),
 			$this->categoryRepository->all(),
 			$this->productRepository->all(),
+			$this->termRepository->all(),
 		);
 	}
 }

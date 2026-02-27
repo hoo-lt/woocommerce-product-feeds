@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Products\Product;
+namespace Hoo\ProductFeeds\Domain;
 
 use ArrayIterator;
 use IteratorAggregate;
@@ -24,20 +24,20 @@ class Attributes implements IteratorAggregate
 		return $this->attributes[$slug];
 	}
 
-	public function first(): Attributes\Attribute
+	public function first(): ?Attributes\Attribute
 	{
 		if (!$this->attributes) {
-			//throw exception
+			return null;
 		}
 
 		$firstKey = array_key_first($this->attributes);
 		return $this->attributes[$firstKey];
 	}
 
-	public function last(): Attributes\Attribute
+	public function last(): ?Attributes\Attribute
 	{
 		if (!$this->attributes) {
-			//throw exception
+			return null;
 		}
 
 		$lastKey = array_key_last($this->attributes);
@@ -55,11 +55,16 @@ class Attributes implements IteratorAggregate
 
 	public function remove(string $slug): void
 	{
-		if (isset($this->attributes[$slug])) {
+		if (!isset($this->attributes[$slug])) {
 			return; //throw domain exception
 		}
 
 		unset($this->attributes[$slug]);
+	}
+
+	public function all(): array
+	{
+		return array_values($this->attributes);
 	}
 
 	public function getIterator(): Traversable

@@ -25,13 +25,16 @@ class Mapper
 				$products->add($product);
 			}
 
-			if (isset($row['attribute_id'])) {
-				if ($product->attributes->has((int) $row['attribute_id'])) {
-					$attribute = $product->attributes->get((int) $row['attribute_id']);
+			if (isset($row['attribute_taxonomy'])) {
+				$slug = strtr($row['attribute_taxonomy'], [
+					'pa_' => '',
+				]);
+
+				if ($product->attributes->has($slug)) {
+					$attribute = $product->attributes->get($slug);
 				} else {
 					$attribute = new Domain\Products\Product\Attributes\Attribute(
-						(int) $row['attribute_id'],
-						$row['attribute_name'],
+						$slug,
 					);
 					$product->attributes->add($attribute);
 				}
@@ -40,7 +43,6 @@ class Mapper
 					if (!$attribute->terms->has($row['term_id'])) {
 						$attribute->terms->add(new Domain\Products\Product\Attributes\Attribute\Terms\Term(
 							(int) $row['term_id'],
-							$row['term_name'],
 						));
 					}
 				}

@@ -16,7 +16,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		protected readonly wpdb $wpdb,
 		protected readonly string $path = __DIR__,
 	) {
-		$this->initializeQuery();
+		$this->initialize();
 	}
 
 	public function postIds(int ...$postIds): self
@@ -36,7 +36,7 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 		]);
 	}
 
-	protected function initializeQuery(): void
+	protected function initialize(): void
 	{
 		$path = "{$this->path}/Query.sql";
 		if (!file_exists($path)) {
@@ -48,7 +48,6 @@ class Query implements Infrastructure\Database\Queries\Select\QueryInterface
 			':posts' => $this->wpdb->posts,
 			':term_taxonomy' => $this->wpdb->term_taxonomy,
 			':terms' => $this->wpdb->terms,
-			':woocommerce_attribute_taxonomies' => $this->wpdb->prefix . 'woocommerce_attribute_taxonomies',
 			':postmeta' => $this->wpdb->postmeta,
 		]);
 	}

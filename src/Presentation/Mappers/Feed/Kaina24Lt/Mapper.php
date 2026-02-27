@@ -13,18 +13,22 @@ class Mapper
 	}
 
 	public function all(
+		Domain\Attributes $attributes,
 		Domain\Brands $brands,
 		Domain\Categories $categories,
 		Domain\Products $products,
+		Domain\Terms $terms,
 	): string {
 		$this->xmlWriter->openMemory();
 
 		$this->xmlWriter->startDocument('1.0', 'UTF-8');
 
 		$this->products(
+			$attributes,
 			$brands,
 			$categories,
 			$products,
+			$terms,
 		);
 
 		$this->xmlWriter->endDocument();
@@ -33,17 +37,21 @@ class Mapper
 	}
 
 	protected function products(
+		Domain\Attributes $attributes,
 		Domain\Brands $brands,
 		Domain\Categories $categories,
 		Domain\Products $products,
+		Domain\Terms $terms,
 	): void {
 		$this->xmlWriter->startElement('products');
 
 		foreach ($products as $product) {
 			$this->product(
+				$attributes,
 				$brands,
 				$categories,
 				$product,
+				$terms,
 			);
 		}
 
@@ -51,9 +59,11 @@ class Mapper
 	}
 
 	protected function product(
+		Domain\Attributes $attributes,
 		Domain\Brands $brands,
 		Domain\Categories $categories,
 		Domain\Products\Product $product,
+		Domain\Terms $terms,
 	): void {
 		$this->xmlWriter->startElement('product');
 		$this->xmlWriter->writeAttribute('id', $product->id);
@@ -84,7 +94,34 @@ class Mapper
 			);
 		}
 
-		$this->specs($product->attributes);
+		$this->xmlWriter->startElement('specs');
+
+		foreach ($product->attributes as $attribute) {
+			if (!$attributes->has($attribute->slug)) {
+				continue;
+			}
+
+			$tt = [];
+
+			foreach ($attribute->terms as $term) {
+				if (!$terms->has($term->id)) {
+					continue;
+				}
+
+				$tt[] = $terms->get($term->id);
+			}
+
+			$attribute = $attributes->get($attribute->slug);
+
+			$this->xmlWriter->startElement('spec');
+			$this->xmlWriter->writeAttribute('name', $attribute->name);
+			$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $tt)));
+			$this->xmlWriter->endElement();
+		}
+
+		$this->xmlWriter->endElement();
+
+		//$this->specs($product->attributes);
 
 		$this->xmlWriter->endElement();
 	}
@@ -123,7 +160,7 @@ class Mapper
 	protected function spec(Domain\Products\Product\Attributes\Attribute $attribute): void
 	{
 		$this->xmlWriter->startElement('spec');
-		$this->xmlWriter->writeAttribute('name', $attribute->name);
+		$this->xmlWriter->writeAttribute('name', $attribute->slug);
 		$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $attribute->terms->all())));
 		$this->xmlWriter->endElement();
 	}

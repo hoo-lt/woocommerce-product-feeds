@@ -1,10 +1,8 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Products\Product\Attributes\Attribute;
+namespace Hoo\ProductFeeds\Domain;
 
-use Hoo\ProductFeeds\Domain;
-
-class Terms extends Domain\AbstractCollection
+class Terms extends AbstractCollection
 {
 	public function get(int $id): Terms\Term
 	{
