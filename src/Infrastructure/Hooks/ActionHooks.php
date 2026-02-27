@@ -42,11 +42,15 @@ class ActionHooks
 		foreach ($this->feedPresenters as $feedPresenter) {
 			add_feed(
 				$feedPresenter->path(),
-				$this->pipeline
-					->middlewares()
-					->object($feedPresenter)
-				(fn($feedPresenter) => $feedPresenter->present())
-				()
+				function () use ($feedPresenter) {
+					$responce = $this->pipeline
+						->middlewares(
+							Infrastructure\Middlewares\Log\Middleware::class,
+						)
+						->object($feedPresenter)
+					(fn($feedPresenter) => $feedPresenter->present());
+					$responce();
+				}
 			);
 		}
 	}
