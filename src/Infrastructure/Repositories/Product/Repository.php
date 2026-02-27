@@ -11,6 +11,7 @@ class Repository implements Domain\Repositories\Product\RepositoryInterface
 		protected readonly Infrastructure\Database\DatabaseInterface $database,
 		protected readonly Infrastructure\Database\Queries\Select\TermRelationship\Query $selectTermRelationshipQuery,
 		protected readonly Infrastructure\Database\Queries\Select\Product\Simple\Query $selectSimpleProductQuery,
+		protected readonly Infrastructure\Database\Queries\Select\Product\Variable\Query $selectVariableProductQuery,
 		protected readonly Infrastructure\Mappers\TermRelationship\Mapper $termRelationshipMapper,
 		protected readonly Infrastructure\Mappers\Product\Mapper $productMapper,
 	) {
@@ -25,6 +26,10 @@ class Repository implements Domain\Repositories\Product\RepositoryInterface
 		return $this->productMapper->all([
 			...$this->database->select(
 				$this->selectSimpleProductQuery
+					->postIds(...$termRelationshipObjectIds)
+			),
+			...$this->database->select(
+				$this->selectVariableProductQuery
 					->postIds(...$termRelationshipObjectIds)
 			),
 		]);
