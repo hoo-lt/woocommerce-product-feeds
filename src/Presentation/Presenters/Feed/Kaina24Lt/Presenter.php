@@ -25,14 +25,24 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 	public function present(): Infrastructure\Http\Response
 	{
 		return new Infrastructure\Http\Response(
-			[
-				'Content-Type: application/xml; charset=utf-8'
-			],
-			$this->kaina24LtMappers->all(
-				$this->brandRepository->all(),
-				$this->categoryRepository->all(),
-				$this->productRepository->all(),
-			)
+			$this->headers(),
+			$this->body(),
+		);
+	}
+
+	protected function headers(): array
+	{
+		return [
+			'Content-Type: application/xml; charset=utf-8'
+		];
+	}
+
+	protected function body(): string
+	{
+		return $this->kaina24LtMappers->all(
+			$this->brandRepository->all(),
+			$this->categoryRepository->all(),
+			$this->productRepository->all(),
 		);
 	}
 }
