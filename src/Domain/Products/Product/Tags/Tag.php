@@ -1,14 +1,13 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Terms;
+namespace Hoo\ProductFeeds\Domain\Products\Product\Tags;
 
 use Hoo\WordPressPluginFramework\Collection;
 
-class Term implements Collection\Item\ItemInterface
+class Tag implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public readonly Term\Id $id,
-		public string $name,
+		public readonly Tag\Id $id,
 	) {
 	}
 

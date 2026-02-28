@@ -2,7 +2,7 @@
 
 namespace Hoo\ProductFeeds\Domain;
 
-use Hoo\WordpressPluginFramework\Collection;
+use Hoo\WordPressPluginFramework\Collection;
 
 class Brands extends Collection\AbstractCollection
 {

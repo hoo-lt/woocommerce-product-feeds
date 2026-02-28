@@ -2,14 +2,17 @@
 
 namespace Hoo\ProductFeeds\Domain\Products;
 
-class Product
+use Hoo\WordPressPluginFramework\Collection;
+
+class Product implements Collection\Item\ItemInterface
 {
 	public Product\Attributes $attributes;
 	public Product\Brands $brands;
 	public Product\Categories $categories;
+	public Product\Tags $tags;
 
 	public function __construct(
-		public int $id,
+		public readonly Product\Id $id,
 		public string $name,
 		public string $url,
 		public float $price,
@@ -19,5 +22,11 @@ class Product
 		$this->attributes = new Product\Attributes();
 		$this->brands = new Product\Brands();
 		$this->categories = new Product\Categories();
+		$this->tags = new Product\Tags();
+	}
+
+	public function key(): Collection\Item\Key\KeyInterface
+	{
+		return $this->id;
 	}
 }

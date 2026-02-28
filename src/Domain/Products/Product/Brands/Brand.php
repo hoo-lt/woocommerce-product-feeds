@@ -2,12 +2,12 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product\Brands;
 
-use Hoo\ProductFeeds\Collection;
+use Hoo\WordPressPluginFramework\Collection;
 
 class Brand implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public Brand\Id $id,
+		public readonly Brand\Id $id,
 	) {
 	}
 

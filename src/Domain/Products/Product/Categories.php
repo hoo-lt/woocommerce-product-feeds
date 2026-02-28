@@ -2,13 +2,19 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product;
 
-use Hoo\ProductFeeds\Domain;
+use Hoo\WordPressPluginFramework\Collection;
 
-class Categories extends Domain\AbstractCollection
+class Categories extends Collection\AbstractCollection
 {
-	public function get(int $id): Categories\Category
+	public function __construct(
+		Categories\Category ...$categories,
+	) {
+		$this->items = $categories;
+	}
+
+	public function get(Collection\Item\Key\KeyInterface $key): Categories\Category
 	{
-		return parent::get($id);
+		return parent::get($key);
 	}
 
 	public function first(): ?Categories\Category
@@ -21,12 +27,13 @@ class Categories extends Domain\AbstractCollection
 		return parent::last();
 	}
 
-	public function add(Categories\Category $category): void
+	public function add(Categories\Category $categories): void
 	{
-		if ($this->has($category->id)) {
-			return; //throw domain exception
+		$key = $categories->key();
+		if ($this->has($key)) {
+			return;
 		}
 
-		$this->items[$category->id] = $category;
+		$this->items[$key()] = $categories;
 	}
 }

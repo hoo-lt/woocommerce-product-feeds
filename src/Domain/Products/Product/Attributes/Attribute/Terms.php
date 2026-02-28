@@ -2,13 +2,19 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product\Attributes\Attribute;
 
-use Hoo\ProductFeeds\Domain;
+use Hoo\WordPressPluginFramework\Collection;
 
-class Terms extends Domain\AbstractCollection
+class Terms extends Collection\AbstractCollection
 {
-	public function get(int $id): Terms\Term
+	public function __construct(
+		Terms\Term ...$terms,
+	) {
+		$this->items = $terms;
+	}
+
+	public function get(Collection\Item\Key\KeyInterface $key): Terms\Term
 	{
-		return parent::get($id);
+		return parent::get($key);
 	}
 
 	public function first(): ?Terms\Term
@@ -23,10 +29,11 @@ class Terms extends Domain\AbstractCollection
 
 	public function add(Terms\Term $term): void
 	{
-		if ($this->has($term->id)) {
-			return; //throw domain exception
+		$key = $term->key();
+		if ($this->has($key)) {
+			return;
 		}
 
-		$this->items[$term->id] = $term;
+		$this->items[$key()] = $term;
 	}
 }

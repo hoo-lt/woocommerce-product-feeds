@@ -2,11 +2,19 @@
 
 namespace Hoo\ProductFeeds\Domain;
 
-class Products extends AbstractCollection
+use Hoo\WordPressPluginFramework\Collection;
+
+class Products extends Collection\AbstractCollection
 {
-	public function get(int $id): Products\Product
+	public function __construct(
+		Products\Product ...$products,
+	) {
+		$this->items = $products;
+	}
+
+	public function get(Collection\Item\Key\KeyInterface $key): Products\Product
 	{
-		return parent::get($id);
+		return parent::get($key);
 	}
 
 	public function first(): ?Products\Product
@@ -21,10 +29,11 @@ class Products extends AbstractCollection
 
 	public function add(Products\Product $product): void
 	{
-		if ($this->has($product->id)) {
-			return; //throw domain exception
+		$key = $product->key();
+		if ($this->has($key)) {
+			return;
 		}
 
-		$this->items[$product->id] = $product;
+		$this->items[$key()] = $product;
 	}
 }

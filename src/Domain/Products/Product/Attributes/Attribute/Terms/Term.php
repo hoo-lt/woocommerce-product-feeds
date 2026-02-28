@@ -2,10 +2,17 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product\Attributes\Attribute\Terms;
 
-class Term
+use Hoo\WordPressPluginFramework\Collection;
+
+class Term implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public int $id,
+		public readonly Term\Id $id,
 	) {
+	}
+
+	public function key(): Collection\Item\Key\KeyInterface
+	{
+		return $this->id;
 	}
 }

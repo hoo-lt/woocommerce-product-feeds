@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Brands\Brand;
+namespace Hoo\ProductFeeds\Domain\Tags\Tag;
 
 use Hoo\WordPressPluginFramework\Collection;
 

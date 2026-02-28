@@ -2,9 +2,9 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product\Brands\Brand;
 
-use Hoo\ProductFeeds\Collection;
+use Hoo\WordPressPluginFramework\Collection;
 
-class Id implements Collection\Item\Key\KeyInterface
+readonly class Id implements Collection\Item\Key\KeyInterface
 {
 	public function __construct(
 		protected int $id,

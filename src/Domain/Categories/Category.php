@@ -2,12 +2,20 @@
 
 namespace Hoo\ProductFeeds\Domain\Categories;
 
-class Category
+use Hoo\WordPressPluginFramework\Collection;
+
+class Category implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public int $id,
+		public readonly Category\Id $id,
+		public ?Category\Id $parentId,
 		public string $name,
 		public string $url,
 	) {
+	}
+
+	public function key(): Collection\Item\Key\KeyInterface
+	{
+		return $this->id;
 	}
 }
