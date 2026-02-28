@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hoo-lt/woocommerce-plugin-framework.git",
-                "reference": "f710aefe1675cfd7c70d33c0a6e4de2cd4e2b90d"
+                "reference": "9ab43236f6a99642827efb3212e54ba3f76272b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hoo-lt/woocommerce-plugin-framework/zipball/f710aefe1675cfd7c70d33c0a6e4de2cd4e2b90d",
-                "reference": "f710aefe1675cfd7c70d33c0a6e4de2cd4e2b90d",
+                "url": "https://api.github.com/repos/hoo-lt/woocommerce-plugin-framework/zipball/9ab43236f6a99642827efb3212e54ba3f76272b2",
+                "reference": "9ab43236f6a99642827efb3212e54ba3f76272b2",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                 "source": "https://github.com/hoo-lt/woocommerce-plugin-framework/tree/main",
                 "issues": "https://github.com/hoo-lt/woocommerce-plugin-framework/issues"
             },
-            "time": "2026-02-28T17:42:30+00:00"
+            "time": "2026-02-28T19:00:57+00:00"
         },
         {
             "name": "hoo-lt/wordpress-plugin-framework",
