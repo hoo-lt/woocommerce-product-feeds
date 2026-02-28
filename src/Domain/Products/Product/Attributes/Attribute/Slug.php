@@ -7,7 +7,7 @@ use Hoo\WordPressPluginFramework\Collection;
 readonly class Slug implements Collection\Item\Key\KeyInterface
 {
 	public function __construct(
-		protected int $slug,
+		protected string $slug,
 	) {
 	}
 

@@ -40,23 +40,22 @@ $containerBuilder->addDefinitions([
 	WordPressPluginFramework\Pipeline\PipelineInterface::class => DI\get(WordPressPluginFramework\Pipeline\Pipeline::class),
 	WordPressPluginFramework\View\ViewInterface::class => DI\get(WordPressPluginFramework\View\View::class),
 
-	Domain\Repositories\Attribute\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Attribute\Repository::class),
-	Domain\Repositories\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Brand\Repository::class),
-	Domain\Repositories\Category\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Category\Repository::class),
-	Domain\Repositories\Product\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Product\Repository::class),
-	Domain\Repositories\Term\RepositoryInterface::class => DI\get(Infrastructure\Repositories\Term\Repository::class),
-	Domain\Repositories\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repositories\TermMeta\Repository::class),
+	Domain\Repository\Attribute\RepositoryInterface::class => DI\get(Infrastructure\Repository\Attribute\Repository::class),
+	Domain\Repository\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repository\Brand\Repository::class),
+	Domain\Repository\Category\RepositoryInterface::class => DI\get(Infrastructure\Repository\Category\Repository::class),
+	Domain\Repository\Product\RepositoryInterface::class => DI\get(Infrastructure\Repository\Product\Repository::class),
+	Domain\Repository\Term\RepositoryInterface::class => DI\get(Infrastructure\Repository\Term\Repository::class),
+	Domain\Repository\TermMeta\RepositoryInterface::class => DI\get(Infrastructure\Repository\TermMeta\Repository::class),
 
-
-	Infrastructure\Database\Queries\Select\Brand\Query::class => DI\autowire()
+	Infrastructure\Database\Query\Select\Brand\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_brand_permalink') ?? ''),
 
-	Infrastructure\Database\Queries\Select\Category\Query::class => DI\autowire()
+	Infrastructure\Database\Query\Select\Category\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_permalinks')['category_base'] ?? ''),
 
-	Infrastructure\Database\Queries\Select\Tag\Query::class => DI\autowire()
+	Infrastructure\Database\Query\Select\Tag\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_permalinks')['tag_base'] ?? ''),
 
