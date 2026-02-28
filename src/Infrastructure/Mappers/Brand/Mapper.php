@@ -15,13 +15,19 @@ class Mapper
 			'name' => $name,
 			'url' => $url,
 		]) {
-			if (!$brands->has((int) $id)) {
-				$brands->add(new Domain\Brands\Brand(
-					(int) $id,
-					$name,
-					$url,
-				));
+			$id = new Domain\Brands\Brand\Id(
+				$id
+			);
+
+			if ($brands->has($id)) {
+				continue;
 			}
+
+			$brands->add(new Domain\Brands\Brand(
+				$id,
+				$name,
+				$url,
+			));
 		}
 
 		return $brands;

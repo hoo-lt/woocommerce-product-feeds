@@ -80,10 +80,9 @@ class Mapper
 
 		$brand = $product->brands->first();
 		if ($brand) {
-			$this->manufacturer(
-				$brands,
-				$brand,
-			);
+			$brand = $brands->get($brand->id);
+
+			$this->cdata('manufacturer', $brand->name);
 		}
 
 		$category = $product->categories->first();
@@ -124,15 +123,6 @@ class Mapper
 		//$this->specs($product->attributes);
 
 		$this->xmlWriter->endElement();
-	}
-
-	protected function manufacturer(
-		Domain\Brands $brands,
-		Domain\Products\Product\Brands\Brand $brand,
-	): void {
-		$brand = $brands->get($brand->id);
-
-		$this->cdata('manufacturer', $brand->name);
 	}
 
 	protected function category(

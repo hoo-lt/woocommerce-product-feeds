@@ -1,20 +1,19 @@
 {
-    "name": "hoo-lt/woocommerce-product-feeds",
-    "description": "WooCommerce product feeds",
-    "type": "project",
-    "license": "GPL-3.0",
-    "autoload": {
-        "psr-4": {
-            "Hoo\\ProductFeeds\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "HOO",
-            "email": "hoo@hoo.lt"
-        }
-    ],
-    "require": {
-        "php-di/php-di": "^7.1"
-    }
+	"name": "hoo-lt/woocommerce-product-feeds",
+	"type": "project",
+	"license": "GPL-3.0",
+	"autoload": {
+		"psr-4": {
+			"Hoo\\ProductFeeds\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Baltic digital agency, UAB",
+			"email": "hoo@hoo.lt"
+		}
+	],
+	"require": {
+		"php-di/php-di": "^7.1"
+	}
 }

@@ -1,0 +1,18 @@
+<?php
+
+namespace Hoo\ProductFeeds\Domain\Products\Product\Brands\Brand;
+
+use Hoo\ProductFeeds\Collection;
+
+class Id implements Collection\Item\Key\KeyInterface
+{
+	public function __construct(
+		protected int $id,
+	) {
+	}
+
+	public function __invoke(): int|string
+	{
+		return $this->id;
+	}
+}

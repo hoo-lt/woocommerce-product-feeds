@@ -2,13 +2,19 @@
 
 namespace Hoo\ProductFeeds\Domain\Products\Product;
 
-use Hoo\ProductFeeds\Domain;
+use Hoo\ProductFeeds\Collection;
 
-class Brands extends Domain\AbstractCollection
+class Brands extends Collection\AbstractCollection
 {
-	public function get(int $id): Brands\Brand
+	public function __construct(
+		Brands\Brand ...$brands,
+	) {
+		$this->items = $brands;
+	}
+
+	public function get(Collection\Item\Key\KeyInterface $key): Brands\Brand
 	{
-		return parent::get($id);
+		return parent::get($key);
 	}
 
 	public function first(): ?Brands\Brand
@@ -23,10 +29,11 @@ class Brands extends Domain\AbstractCollection
 
 	public function add(Brands\Brand $brand): void
 	{
-		if ($this->has($brand->id)) {
-			return; //throw domain exception
+		$key = $brand->key();
+		if ($this->has($key)) {
+			return;
 		}
 
-		$this->items[$brand->id] = $brand;
+		$this->items[$key()] = $brand;
 	}
 }
