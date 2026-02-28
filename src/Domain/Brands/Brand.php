@@ -7,11 +7,21 @@ use Hoo\WordPressPluginFramework\Collection;
 class Brand implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public readonly Brand\Id $id,
-		public ?Brand\Id $parentId,
+		protected readonly Brand\Id $id,
+		protected ?Brand\Id $parentId,
 		public string $name,
 		public string $url,
 	) {
+	}
+
+	public function id(): int
+	{
+		return ($this->id)();
+	}
+
+	public function parentId(): ?int
+	{
+		return $this->parentId ? ($this->parentId)() : null;
 	}
 
 	public function key(): Collection\Item\Key\KeyInterface

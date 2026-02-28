@@ -1,12 +1,12 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Hooks;
+namespace Hoo\ProductFeeds\Infrastructure\Hook\Filter;
 
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Presentation;
 use WP_Term;
 
-class FilterHooks
+class Hook
 {
 	public function __construct(
 		protected readonly Presentation\Presenters\Term\Presenter $termPresenter,

@@ -7,8 +7,6 @@ use Hoo\WordPressPluginFramework\Logger\LoggerInterface;
 
 class Middleware implements MiddlewareInterface
 {
-	protected const SOURCE = 'product-feeds';
-
 	public function __construct(
 		protected readonly LoggerInterface $logger,
 	) {

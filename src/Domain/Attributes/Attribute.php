@@ -7,9 +7,14 @@ use Hoo\WordPressPluginFramework\Collection;
 class Attribute implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public readonly Attribute\Slug $slug,
+		protected readonly Attribute\Slug $slug,
 		public string $name,
 	) {
+	}
+
+	public function slug(): string
+	{
+		return ($this->slug)();
 	}
 
 	public function key(): Collection\Item\Key\KeyInterface

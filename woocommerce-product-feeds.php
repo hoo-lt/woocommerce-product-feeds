@@ -39,6 +39,8 @@ $containerBuilder->addDefinitions([
 	WordPressPluginFramework\Database\DatabaseInterface::class => DI\get(WordPressPluginFramework\Database\Database::class),
 	WordPressPluginFramework\Pipeline\PipelineInterface::class => DI\get(WordPressPluginFramework\Pipeline\Pipeline::class),
 	WordPressPluginFramework\View\ViewInterface::class => DI\get(WordPressPluginFramework\View\View::class),
+	WordPressPluginFramework\Logger\LoggerInterface::class => DI\autowire(WooCommercePluginFramework\Logger\Logger::class)
+		->constructorParameter('source', 'product-feeds'),
 
 	Domain\Repository\Attribute\RepositoryInterface::class => DI\get(Infrastructure\Repository\Attribute\Repository::class),
 	Domain\Repository\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repository\Brand\Repository::class),
@@ -59,15 +61,20 @@ $containerBuilder->addDefinitions([
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_permalinks')['tag_base'] ?? ''),
 
-	Infrastructure\Hooks\ActionHooks::class => DI\factory(fn(DI\Container $container) => new Infrastructure\Hooks\ActionHooks(
-		$container->get(WordPressPluginFramework\Pipeline\PipelineInterface::class),
-		...[
+	Infrastructure\Hook\Action\Hook::class => DI\factory(function (DI\Container $container) {
+		$pipeline = $container->get(WordPressPluginFramework\Pipeline\PipelineInterface::class);
+		$feedPresenters = array_map($container->get(...), [
 			...[
-				$container->get(Presentation\Presenters\Feed\Kaina24Lt\Presenter::class),
+				Presentation\Presenters\Feed\Kaina24Lt\Presenter::class,
 			],
 			...apply_filters('woocommerce_product_feeds_add_feed_presenters', []),
-		]
-	)),
+		]);
+
+		return new Infrastructure\Hook\Action\Hook(
+			$pipeline,
+			...$feedPresenters
+		);
+	}),
 
 	wpdb::class => DI\factory(function () {
 		global $wpdb;
@@ -81,11 +88,11 @@ $containerBuilder->addDefinitions([
 
 $container = $containerBuilder->build();
 
-$actionHooks = $container->get(Infrastructure\Hooks\ActionHooks::class);
-$actionHooks();
+$actionHook = $container->get(Infrastructure\Hook\Action\Hook::class);
+$actionHook();
 
-$filterHooks = $container->get(Infrastructure\Hooks\FilterHooks::class);
-$filterHooks();
+$filterHook = $container->get(Infrastructure\Hook\Filter\Hook::class);
+$filterHook();
 
 register_activation_hook(__FILE__, function () {
 	flush_rewrite_rules();

@@ -7,8 +7,13 @@ use Hoo\WordPressPluginFramework\Collection;
 class Category implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public readonly Category\Id $id,
+		protected readonly Category\Id $id,
 	) {
+	}
+
+	public function id(): int
+	{
+		return ($this->id)();
 	}
 
 	public function key(): Collection\Item\Key\KeyInterface

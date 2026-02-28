@@ -12,7 +12,7 @@ class Product implements Collection\Item\ItemInterface
 	public Product\Tags $tags;
 
 	public function __construct(
-		public readonly Product\Id $id,
+		protected readonly Product\Id $id,
 		public string $name,
 		public string $url,
 		public float $price,
@@ -23,6 +23,11 @@ class Product implements Collection\Item\ItemInterface
 		$this->brands = new Product\Brands();
 		$this->categories = new Product\Categories();
 		$this->tags = new Product\Tags();
+	}
+
+	public function id(): int
+	{
+		return ($this->id)();
 	}
 
 	public function key(): Collection\Item\Key\KeyInterface

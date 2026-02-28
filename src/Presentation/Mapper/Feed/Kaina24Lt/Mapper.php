@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Presentation\Mappers\Feed\Kaina24Lt;
+namespace Hoo\ProductFeeds\Presentation\Mapper\Feed\Kaina24Lt;
 
 use Hoo\ProductFeeds\Domain;
 use XMLWriter;
@@ -66,7 +66,7 @@ class Mapper
 		Domain\Terms $terms,
 	): void {
 		$this->xmlWriter->startElement('product');
-		$this->xmlWriter->writeAttribute('id', $product->id);
+		$this->xmlWriter->writeAttribute('id', $product->id());
 
 		$this->cdata('title', $product->name);
 		$this->text('price', (string) $product->price); //temp typecasting
@@ -78,80 +78,88 @@ class Mapper
 			$this->text('ean_code', $product->gtin);
 		}
 
+		$this->manufacturer($brands, $product);
+		$this->category($categories, $product);
+		$this->specs($attributes, $product, $terms);
+
+		$this->xmlWriter->endElement();
+	}
+
+	protected function manufacturer(
+		Domain\Brands $brands,
+		Domain\Products\Product $product,
+	): void {
 		$brand = $product->brands->first();
-		if ($brand) {
-			$brand = $brands->get($brand->id);
-
-			$this->cdata('manufacturer', $brand->name);
+		if (!$brand) {
+			return;
 		}
 
-		$category = $product->categories->first();
-		if ($category) {
-			$this->category(
-				$categories,
-				$category,
-			);
+		if (!$brands->has($brand->key())) {
+			return;
 		}
 
-		$this->xmlWriter->startElement('specs');
+		$brand = $brands->get($brand->key());
 
-		foreach ($product->attributes as $attribute) {
-			if (!$attributes->has($attribute->slug)) {
-				continue;
-			}
-
-			$tt = [];
-
-			foreach ($attribute->terms as $term) {
-				if (!$terms->has($term->id)) {
-					continue;
-				}
-
-				$tt[] = $terms->get($term->id);
-			}
-
-			$attribute = $attributes->get($attribute->slug);
-
-			$this->xmlWriter->startElement('spec');
-			$this->xmlWriter->writeAttribute('name', $attribute->name);
-			$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $tt)));
-			$this->xmlWriter->endElement();
-		}
-
-		$this->xmlWriter->endElement();
-
-		//$this->specs($product->attributes);
-
-		$this->xmlWriter->endElement();
+		$this->cdata('manufacturer', $brand->name);
 	}
 
 	protected function category(
 		Domain\Categories $categories,
-		Domain\Products\Product\Categories\Category $category,
+		Domain\Products\Product $product,
 	): void {
-		$category = $categories->get($category->id);
+		$category = $product->categories->first();
+		if (!$category) {
+			return;
+		}
 
-		$this->text('category_id', $category->id);
+		if (!$categories->has($category->key())) {
+			return;
+		}
+
+		$category = $categories->get($category->key());
+
+		$this->text('category_id', $category->id());
 		$this->cdata('category_name', $category->name);
 		$this->cdata('category_link', $category->url);
 	}
 
-	protected function specs(Domain\Products\Product\Attributes $attributes): void
-	{
+	protected function specs(
+		Domain\Attributes $attributes,
+		Domain\Products\Product $product,
+		Domain\Terms $terms,
+	): void {
 		$this->xmlWriter->startElement('specs');
 
-		foreach ($attributes as $attribute) {
-			$this->spec($attribute);
+		foreach ($product->attributes as $attribute) {
+			$terms = clone $terms;
+
+			foreach ($attribute->terms as $term) {
+				if ($terms->has($term->key())) {
+					continue;
+				}
+
+				$terms->remove($term->key());
+			}
+
+			if (!$attributes->has($attribute->key())) {
+				continue;
+			}
+
+			$attribute = $attributes->get($attribute->key());
+
+			$this->spec($attribute, $terms);
 		}
 
 		$this->xmlWriter->endElement();
 	}
 
-	protected function spec(Domain\Products\Product\Attributes\Attribute $attribute): void
-	{
+	protected function spec(
+		Domain\Attributes\Attribute $attribute,
+		Domain\Terms $terms,
+	): void {
 		$this->xmlWriter->startElement('spec');
-		$this->xmlWriter->writeAttribute('name', $attribute->slug);
-		$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $attribute->terms->all())));
+		$this->xmlWriter->writeAttribute('name', $attribute->name);
+		$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $terms->all())));
 		$this->xmlWriter->endElement();
 	}
 

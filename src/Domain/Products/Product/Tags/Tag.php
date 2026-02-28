@@ -7,9 +7,15 @@ use Hoo\WordPressPluginFramework\Collection;
 class Tag implements Collection\Item\ItemInterface
 {
 	public function __construct(
-		public readonly Tag\Id $id,
+		protected readonly Tag\Id $id,
 	) {
 	}
+
+	public function id(): int
+	{
+		return ($this->id)();
+	}
+
 
 	public function key(): Collection\Item\Key\KeyInterface
 	{

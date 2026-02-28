@@ -1,16 +1,17 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Hooks;
+namespace Hoo\ProductFeeds\Infrastructure\Hook\Action;
 
+use Hoo\WordPressPluginFramework\Pipeline\PipelineInterface;
 use Hoo\ProductFeeds\Infrastructure;
 use Hoo\ProductFeeds\Presentation;
 
-class ActionHooks
+class Hook
 {
 	protected readonly array $feedPresenters;
 
 	public function __construct(
-		protected readonly Infrastructure\Pipeline\Pipeline $pipeline,
+		protected readonly PipelineInterface $pipeline,
 		Presentation\Presenters\Feed\PresenterInterface ...$feedPresenters,
 	) {
 		$this->feedPresenters = $feedPresenters;
@@ -45,7 +46,7 @@ class ActionHooks
 				function () use ($feedPresenter) {
 					$responce = $this->pipeline
 						->middlewares(
-							Infrastructure\Middlewares\ExecutionTime\Middleware::class,
+							Infrastructure\Middleware\LogExecutionTime\Middleware::class,
 						)
 						->object($feedPresenter)
 					(fn($feedPresenter) => $feedPresenter->present());

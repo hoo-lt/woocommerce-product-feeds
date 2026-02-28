@@ -2,11 +2,11 @@
 
 namespace Hoo\ProductFeeds\Presentation\Presenters\Feed;
 
-use Hoo\ProductFeeds\Infrastructure;
+use Hoo\WordPressPluginFramework\Http;
 
 interface PresenterInterface
 {
-	public function present(): Infrastructure\Http\Response;
+	public function present(): Http\ResponseInterface;
 
 	public function path(): string;
 }
