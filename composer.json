@@ -16,11 +16,17 @@
 	"repositories": [
 		{
 			"type": "vcs",
+			"url": "https://github.com/hoo-lt/wordpress-plugin-framework"
+		},
+		{
+			"type": "vcs",
 			"url": "https://github.com/hoo-lt/woocommerce-plugin-framework"
 		}
 	],
 	"require": {
 		"hoo-lt/woocommerce-plugin-framework": "dev-main",
 		"php-di/php-di": "^7.1"
-	}
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }
