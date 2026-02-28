@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hoo-lt/woocommerce-plugin-framework.git",
-                "reference": "38ecd7b0ec2f85618ee584e9c47c1890acd55bba"
+                "reference": "4dbcd7006fada56d4ead3864a11426bcb94ab46d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hoo-lt/woocommerce-plugin-framework/zipball/38ecd7b0ec2f85618ee584e9c47c1890acd55bba",
-                "reference": "38ecd7b0ec2f85618ee584e9c47c1890acd55bba",
+                "url": "https://api.github.com/repos/hoo-lt/woocommerce-plugin-framework/zipball/4dbcd7006fada56d4ead3864a11426bcb94ab46d",
+                "reference": "4dbcd7006fada56d4ead3864a11426bcb94ab46d",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                 "source": "https://github.com/hoo-lt/woocommerce-plugin-framework/tree/main",
                 "issues": "https://github.com/hoo-lt/woocommerce-plugin-framework/issues"
             },
-            "time": "2026-02-28T17:20:49+00:00"
+            "time": "2026-02-28T17:33:39+00:00"
         },
         {
             "name": "hoo-lt/wordpress-plugin-framework",
@@ -51,12 +51,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hoo-lt/wordpress-plugin-framework.git",
-                "reference": "98dd2040052cfbc1dd11cdb42ad3b677e1c0b897"
+                "reference": "af350714a62ac7a518e1ce9ce6b8c7a82f53d4c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hoo-lt/wordpress-plugin-framework/zipball/98dd2040052cfbc1dd11cdb42ad3b677e1c0b897",
-                "reference": "98dd2040052cfbc1dd11cdb42ad3b677e1c0b897",
+                "url": "https://api.github.com/repos/hoo-lt/wordpress-plugin-framework/zipball/af350714a62ac7a518e1ce9ce6b8c7a82f53d4c4",
+                "reference": "af350714a62ac7a518e1ce9ce6b8c7a82f53d4c4",
                 "shasum": ""
             },
             "default-branch": true,
@@ -79,7 +79,7 @@
                 "source": "https://github.com/hoo-lt/wordpress-plugin-framework/tree/main",
                 "issues": "https://github.com/hoo-lt/wordpress-plugin-framework/issues"
             },
-            "time": "2026-02-28T17:20:42+00:00"
+            "time": "2026-02-28T17:33:32+00:00"
         },
         {
             "name": "laravel/serializable-closure",
