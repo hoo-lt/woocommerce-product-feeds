@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Presentation\Mappers\TermMeta;
+namespace Hoo\ProductFeeds\Presentation\Mapper\TermMeta;
 
 use Hoo\ProductFeeds\Domain;
 

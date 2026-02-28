@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Infrastructure\Middleware\ExecutionTime;
+namespace Hoo\ProductFeeds\Infrastructure\Middleware\LogExecutionTime;
 
 use Hoo\WordPressPluginFramework\Middleware\MiddlewareInterface;
 use Hoo\WordPressPluginFramework\Logger\LoggerInterface;

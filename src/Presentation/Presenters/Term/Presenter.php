@@ -2,15 +2,16 @@
 
 namespace Hoo\ProductFeeds\Presentation\Presenters\Term;
 
+use Hoo\WordPressPluginFramework\View\ViewInterface;
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Presentation;
 
 class Presenter
 {
 	public function __construct(
-		protected readonly Presentation\View\ViewInterface $view,
-		protected readonly Presentation\Mappers\TermMeta\Mapper $termMetaMapper,
-		protected readonly Domain\Repositories\TermMeta\RepositoryInterface $termMetaRepository,
+		protected readonly ViewInterface $view,
+		protected readonly Presentation\Mapper\TermMeta\Mapper $termMetaMapper,
+		protected readonly Domain\Repository\TermMeta\RepositoryInterface $termMetaRepository,
 	) {
 	}
 

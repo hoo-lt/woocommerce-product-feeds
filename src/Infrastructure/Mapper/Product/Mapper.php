@@ -10,56 +10,104 @@ class Mapper
 	{
 		$products = new Domain\Products();
 
-		foreach ($table as $row) {
-			if ($products->has((int) $row['id'])) {
-				$product = $products->get((int) $row['id']);
+		foreach ($table as [
+			'id' => $id,
+			'name' => $name,
+			'url' => $url,
+			'price' => $price,
+			'stock' => $stock,
+			'gtin' => $gtin,
+			'attribute_taxonomy' => $attributeTaxonomy,
+			'term_id' => $termId,
+			'brand_id' => $brandId,
+			'category_id' => $categoryId,
+			'tag_id' => $tagId,
+		]) {
+			$id = new Domain\Products\Product\Id(
+				$id,
+			);
+
+			if ($products->has($id)) {
+				$product = $products->get($id);
 			} else {
 				$product = new Domain\Products\Product(
-					(int) $row['id'],
-					$row['name'],
-					$row['slug'],
-					(float) $row['price'],
-					(int) $row['stock'],
-					$row['gtin']
+					$id,
+					$name,
+					$url,
+					$price,
+					$stock,
+					$gtin,
 				);
 				$products->add($product);
 			}
 
-			if (isset($row['attribute_taxonomy'])) {
+			if ($attributeTaxonomy) {
+				$attributeSlug = $attributeTaxonomy; //replace pa_
+
+				$attributeSlug = new Domain\Products\Product\Attributes\Attribute\Slug(
+					$attributeSlug,
+				);
+
+				/*
 				$slug = strtr($row['attribute_taxonomy'], [
 					'pa_' => '',
 				]);
+				*/
 
-				if ($product->attributes->has($slug)) {
-					$attribute = $product->attributes->get($slug);
+				if ($product->attributes->has($attributeSlug)) {
+					$attribute = $product->attributes->get($attributeSlug);
 				} else {
 					$attribute = new Domain\Products\Product\Attributes\Attribute(
-						$slug,
+						$attributeSlug,
 					);
 					$product->attributes->add($attribute);
 				}
 
-				if (isset($row['term_id'])) {
-					if (!$attribute->terms->has($row['term_id'])) {
+				if ($termId) {
+					$termId = new Domain\Products\Product\Attributes\Attribute\Terms\Term\Id(
+						$termId,
+					);
+
+					if (!$attribute->terms->has($termId)) {
 						$attribute->terms->add(new Domain\Products\Product\Attributes\Attribute\Terms\Term(
-							(int) $row['term_id'],
+							$termId,
 						));
 					}
 				}
 			}
 
-			if (isset($row['brand_id'])) {
-				if (!$product->brands->has((int) $row['brand_id'])) {
+			if ($brandId) {
+				$brandId = new Domain\Products\Product\Brands\Brand\Id(
+					$brandId,
+				);
+
+				if (!$product->brands->has($brandId)) {
 					$product->brands->add(new Domain\Products\Product\Brands\Brand(
-						(int) $row['brand_id'],
+						$brandId,
 					));
 				}
 			}
 
-			if (isset($row['category_id'])) {
-				if (!$product->categories->has((int) $row['category_id'])) {
+			if ($categoryId) {
+				$categoryId = new Domain\Products\Product\Categories\Category\Id(
+					$categoryId,
+				);
+
+				if (!$product->categories->has($categoryId)) {
 					$product->categories->add(new Domain\Products\Product\Categories\Category(
-						(int) $row['category_id'],
+						$categoryId,
+					));
+				}
+			}
+
+			if ($tagId) {
+				$tagId = new Domain\Products\Product\Tags\Tag\Id(
+					$tagId,
+				);
+
+				if (!$product->tags->has($tagId)) {
+					$product->tags->add(new Domain\Products\Product\Tags\Tag(
+						$tagId,
 					));
 				}
 			}
