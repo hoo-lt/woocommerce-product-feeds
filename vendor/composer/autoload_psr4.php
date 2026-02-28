@@ -9,6 +9,7 @@ return array(
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Laravel\\SerializableClosure\\' => array($vendorDir . '/laravel/serializable-closure/src'),
     'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),
+    'Hoo\\WordpressPluginFramework\\' => array($vendorDir . '/hoo-lt/wordpress-plugin-framework/src'),
     'Hoo\\ProductFeeds\\' => array($baseDir . '/src'),
     'DI\\' => array($vendorDir . '/php-di/php-di/src'),
 );

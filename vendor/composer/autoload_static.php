@@ -25,6 +25,7 @@ class ComposerStaticInit854f65b65e3a19dbc35c4aadcff9e1b0
         ),
         'H' =>
         array (
+            'Hoo\\WordpressPluginFramework\\' => 29,
             'Hoo\\ProductFeeds\\' => 17,
         ),
         'D' =>
@@ -45,6 +46,10 @@ class ComposerStaticInit854f65b65e3a19dbc35c4aadcff9e1b0
         'Invoker\\' =>
         array (
             0 => __DIR__ . '/..' . '/php-di/invoker/src',
+        ),
+        'Hoo\\WordpressPluginFramework\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/hoo-lt/wordpress-plugin-framework/src',
         ),
         'Hoo\\ProductFeeds\\' =>
         array (

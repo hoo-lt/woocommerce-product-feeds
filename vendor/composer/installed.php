@@ -3,7 +3,7 @@
         'name' => 'hoo-lt/woocommerce-product-feeds',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'cd11af2c046674cdcfedd4e29adb691e710b01af',
+        'reference' => 'fa49f886405d3016690761850fafac1d1d693e3b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,10 +13,21 @@
         'hoo-lt/woocommerce-product-feeds' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cd11af2c046674cdcfedd4e29adb691e710b01af',
+            'reference' => 'fa49f886405d3016690761850fafac1d1d693e3b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'hoo-lt/wordpress-plugin-framework' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '9791075bc0538b4367648a34170501741201e372',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../hoo-lt/wordpress-plugin-framework',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'laravel/serializable-closure' => array(

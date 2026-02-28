@@ -13,7 +13,14 @@
 			"email": "hoo@hoo.lt"
 		}
 	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/hoo-lt/wordpress-plugin-framework"
+		}
+	],
 	"require": {
-		"php-di/php-di": "^7.1"
+		"php-di/php-di": "^7.1",
+		"hoo-lt/wordpress-plugin-framework": "dev-main"
 	}
 }

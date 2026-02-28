@@ -4,8 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1dee8c3d31032bdbbe9eee281ce94d4a",
+    "content-hash": "0edfd6f45db125c90aee5d25bd40ef80",
     "packages": [
+        {
+            "name": "hoo-lt/wordpress-plugin-framework",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hoo-lt/wordpress-plugin-framework.git",
+                "reference": "9791075bc0538b4367648a34170501741201e372"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hoo-lt/wordpress-plugin-framework/zipball/9791075bc0538b4367648a34170501741201e372",
+                "reference": "9791075bc0538b4367648a34170501741201e372",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hoo\\WordpressPluginFramework\\": "src/"
+                }
+            },
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Baltic digital agency, UAB",
+                    "email": "hoo@hoo.lt"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/hoo-lt/wordpress-plugin-framework/tree/main",
+                "issues": "https://github.com/hoo-lt/wordpress-plugin-framework/issues"
+            },
+            "time": "2026-02-28T16:44:51+00:00"
+        },
         {
             "name": "laravel/serializable-closure",
             "version": "v2.0.10",
@@ -252,7 +288,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "hoo-lt/wordpress-plugin-framework": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {},

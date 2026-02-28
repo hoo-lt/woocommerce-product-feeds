@@ -1,6 +1,45 @@
 {
     "packages": [
         {
+            "name": "hoo-lt/wordpress-plugin-framework",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hoo-lt/wordpress-plugin-framework.git",
+                "reference": "9791075bc0538b4367648a34170501741201e372"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hoo-lt/wordpress-plugin-framework/zipball/9791075bc0538b4367648a34170501741201e372",
+                "reference": "9791075bc0538b4367648a34170501741201e372",
+                "shasum": ""
+            },
+            "time": "2026-02-28T16:44:51+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Hoo\\WordpressPluginFramework\\": "src/"
+                }
+            },
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Baltic digital agency, UAB",
+                    "email": "hoo@hoo.lt"
+                }
+            ],
+            "support": {
+                "source": "https://github.com/hoo-lt/wordpress-plugin-framework/tree/main",
+                "issues": "https://github.com/hoo-lt/wordpress-plugin-framework/issues"
+            },
+            "install-path": "../hoo-lt/wordpress-plugin-framework"
+        },
+        {
             "name": "laravel/serializable-closure",
             "version": "v2.0.10",
             "version_normalized": "2.0.10.0",
