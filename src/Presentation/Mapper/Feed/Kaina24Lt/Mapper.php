@@ -181,7 +181,7 @@ class Mapper
 	protected function utmUrl(Http\UrlInterface $url): Http\UrlInterface
 	{
 		return $url
-			->withQueryValue('utm_source', 'kaina24')
+			->withQueryValue('utm_source', 'kaina24.lt')
 			->withQueryValue('utm_medium', 'price_aggregator')
 			->withQueryValue('utm_campaign', 'feed_plugin');
 	}

@@ -42,6 +42,8 @@ $containerBuilder->addDefinitions([
 		->constructorParameter('path', WOOCOMMERCE_PRODUCT_FEEDS_PLUGIN_PATH . '/src/Presentation/View'),
 	WordPressPluginFramework\Logger\LoggerInterface::class => DI\autowire(WooCommercePluginFramework\Logger\Logger::class)
 		->constructorParameter('source', 'product-feeds'),
+	WordPressPluginFramework\Middleware\VerifyNonce\Middleware::class => DI\autowire()
+		->constructorParameter('nonceName', 'product_feeds_nonce'),
 
 	WordPressPluginFramework\Http\RequestInterface::class => DI\factory(fn() => new WordPressPluginFramework\Http\Request(
 		$_GET,
