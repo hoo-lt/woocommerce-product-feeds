@@ -37,11 +37,11 @@ class Hook
 			], PHP_INT_MAX, 2);
 			add_action("created_{$taxonomy->value}", [
 				$this,
-				'created_taxonomy'
+				'save_taxonomy'
 			], PHP_INT_MAX, 3);
 			add_action("edited_{$taxonomy->value}", [
 				$this,
-				'edited_taxonomy'
+				'save_taxonomy'
 			], PHP_INT_MAX, 3);
 		}
 	}
@@ -71,23 +71,13 @@ class Hook
 		echo $this->termPresenter->editView($tag->term_id);
 	}
 
-	public function created_taxonomy(int $term_id, int $tt_id, array $args): void
+	public function save_taxonomy(int $term_id, int $tt_id, array $args): void
 	{
 		$this->pipeline
 			->object($this->termPresenter)
 			->middlewares(
 				Middleware\VerifyNonce\Middleware::class,
 			)
-		(fn($termPresenter) => $termPresenter->add($term_id));
-	}
-
-	public function edited_taxonomy(int $term_id, int $tt_id, array $args): void
-	{
-		$this->pipeline
-			->object($this->termPresenter)
-			->middlewares(
-				Middleware\VerifyNonce\Middleware::class,
-			)
-		(fn($termPresenter) => $termPresenter->edit($term_id));
+		(fn($termPresenter) => $termPresenter->save($term_id));
 	}
 }

@@ -43,17 +43,7 @@ class Presenter
 		]);
 	}
 
-	public function add(int $id): void
-	{
-		$value = $this->request->post(Domain\TermMeta::KEY);
-		if ($value) {
-			$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
-		} else {
-			//$this->termMetaRepository->delete?
-		}
-	}
-
-	public function edit(int $id): void
+	public function save(int $id): void
 	{
 		$value = $this->request->post(Domain\TermMeta::KEY);
 		if ($value) {
