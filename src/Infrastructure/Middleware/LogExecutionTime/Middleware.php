@@ -14,11 +14,11 @@ class Middleware implements MiddlewareInterface
 
 	public function __invoke(object $object, callable $callable): mixed
 	{
-		$startTime = microtime();
+		$startTime = microtime(true);
 
 		$result = $callable($object);
 
-		$stopTime = microtime();
+		$stopTime = microtime(true);
 
 		$this->logger->info(sprintf('Object: %s | Execution time: %d ms', $object::class, ($stopTime - $startTime) * 1000));
 
