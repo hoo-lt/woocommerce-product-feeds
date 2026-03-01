@@ -11,6 +11,7 @@ if (!defined('WOOCOMMERCE_PRODUCT_FEEDS')) {
 		</label>
 	</th>
 	<td>
+		<?php wp_nonce_field(-1, 'product_feeds_nonce'); ?>
 		<select name="product_feeds" id="product_feeds" class="postform" aria-describedby="product_feeds-description">
 			<?php foreach ($options as $option): ?>
 				<option class="level-0" value="<?= esc_attr($option['value']); ?>">

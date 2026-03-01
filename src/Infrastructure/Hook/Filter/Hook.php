@@ -2,6 +2,8 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Hook\Filter;
 
+use Hoo\WordPressPluginFramework\Middleware;
+use Hoo\WordPressPluginFramework\Pipeline\PipelineInterface;
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Presentation;
 use WP_Term;
@@ -9,6 +11,7 @@ use WP_Term;
 class Hook
 {
 	public function __construct(
+		protected readonly PipelineInterface $pipeline,
 		protected readonly Presentation\Presenters\Term\Presenter $termPresenter,
 	) {
 	}
@@ -70,11 +73,21 @@ class Hook
 
 	public function created_taxonomy(int $term_id, int $tt_id, array $args): void
 	{
-		$this->termPresenter->add($term_id, $_POST['product_feeds']);
+		$this->pipeline
+			->object($this->termPresenter)
+			->middlewares(
+				Middleware\VerifyNonce\Middleware::class,
+			)
+		(fn($termPresenter) => $termPresenter->add($term_id));
 	}
 
 	public function edited_taxonomy(int $term_id, int $tt_id, array $args): void
 	{
-		$this->termPresenter->edit($term_id, $_POST['product_feeds']);
+		$this->pipeline
+			->object($this->termPresenter)
+			->middlewares(
+				Middleware\VerifyNonce\Middleware::class,
+			)
+		(fn($termPresenter) => $termPresenter->edit($term_id));
 	}
 }

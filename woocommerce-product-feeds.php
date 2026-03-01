@@ -43,6 +43,11 @@ $containerBuilder->addDefinitions([
 	WordPressPluginFramework\Logger\LoggerInterface::class => DI\autowire(WooCommercePluginFramework\Logger\Logger::class)
 		->constructorParameter('source', 'product-feeds'),
 
+	WordPressPluginFramework\Http\RequestInterface::class => DI\factory(fn() => new WordPressPluginFramework\Http\Request(
+		$_GET,
+		$_POST,
+	)),
+
 	Domain\Repository\Attribute\RepositoryInterface::class => DI\get(Infrastructure\Repository\Attribute\Repository::class),
 	Domain\Repository\Brand\RepositoryInterface::class => DI\get(Infrastructure\Repository\Brand\Repository::class),
 	Domain\Repository\Category\RepositoryInterface::class => DI\get(Infrastructure\Repository\Category\Repository::class),

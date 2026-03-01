@@ -2,6 +2,7 @@
 
 namespace Hoo\ProductFeeds\Presentation\Presenters\Term;
 
+use Hoo\WordPressPluginFramework\Http\RequestInterface;
 use Hoo\WordPressPluginFramework\View\ViewInterface;
 use Hoo\ProductFeeds\Domain;
 use Hoo\ProductFeeds\Presentation;
@@ -9,6 +10,7 @@ use Hoo\ProductFeeds\Presentation;
 class Presenter
 {
 	public function __construct(
+		protected readonly RequestInterface $request,
 		protected readonly ViewInterface $view,
 		protected readonly Presentation\Mapper\TermMeta\Mapper $termMetaMapper,
 		protected readonly Domain\Repository\TermMeta\RepositoryInterface $termMetaRepository,
@@ -41,13 +43,23 @@ class Presenter
 		]);
 	}
 
-	public function add(int $id, string $value): void
+	public function add(int $id): void
 	{
-		$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
+		$value = $this->request->post(Domain\TermMeta::KEY);
+		if ($value) {
+			$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
+		} else {
+			//$this->termMetaRepository->delete?
+		}
 	}
 
-	public function edit(int $id, string $value): void
+	public function edit(int $id): void
 	{
-		$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
+		$value = $this->request->post(Domain\TermMeta::KEY);
+		if ($value) {
+			$this->termMetaRepository->set($id, Domain\TermMeta::from($value));
+		} else {
+			//$this->termMetaRepository->delete?
+		}
 	}
 }
