@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: WooCommerce product feeds by HOO
+ * Plugin Name: LT Product Feeds for WooCommerce
  * Plugin URI: https://github.com/hoo-lt/woocommerce-product-feeds
  * Description:
  * Version: 1.0.0
