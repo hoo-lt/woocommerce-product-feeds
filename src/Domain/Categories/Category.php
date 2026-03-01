@@ -3,6 +3,7 @@
 namespace Hoo\ProductFeeds\Domain\Categories;
 
 use Hoo\WordPressPluginFramework\Collection;
+use Hoo\WordPressPluginFramework\Http;
 
 class Category implements Collection\Item\ItemInterface
 {
@@ -10,7 +11,7 @@ class Category implements Collection\Item\ItemInterface
 		protected readonly Category\Id $id,
 		protected ?Category\Id $parentId,
 		public string $name,
-		public string $url,
+		public Http\UrlInterface $url,
 	) {
 	}
 

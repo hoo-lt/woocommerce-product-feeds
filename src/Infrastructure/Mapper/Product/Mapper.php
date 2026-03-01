@@ -2,6 +2,7 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Mapper\Product;
 
+use Hoo\WordPressPluginFramework\Http;
 use Hoo\ProductFeeds\Domain;
 
 class Mapper
@@ -33,7 +34,7 @@ class Mapper
 				$product = new Domain\Products\Product(
 					$id,
 					$name,
-					'',
+					Http\Url::from(''),
 					$price,
 					$stock,
 					$gtin,

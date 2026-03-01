@@ -3,6 +3,7 @@
 namespace Hoo\ProductFeeds\Domain\Products;
 
 use Hoo\WordPressPluginFramework\Collection;
+use Hoo\WordPressPluginFramework\Http;
 
 class Product implements Collection\Item\ItemInterface
 {
@@ -14,7 +15,7 @@ class Product implements Collection\Item\ItemInterface
 	public function __construct(
 		protected readonly Product\Id $id,
 		public string $name,
-		public string $url,
+		public Http\UrlInterface $url,
 		public float $price,
 		public ?int $stock,
 		public ?string $gtin,

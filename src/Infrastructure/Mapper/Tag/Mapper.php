@@ -2,6 +2,7 @@
 
 namespace Hoo\ProductFeeds\Infrastructure\Mapper\Tag;
 
+use Hoo\WordPressPluginFramework\Http;
 use Hoo\ProductFeeds\Domain;
 
 class Mapper
@@ -32,7 +33,7 @@ class Mapper
 				$id,
 				$parentId,
 				$name,
-				$url,
+				Http\Url::from($url),
 			));
 		}
 

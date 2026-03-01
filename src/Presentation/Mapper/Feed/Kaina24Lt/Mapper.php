@@ -2,6 +2,7 @@
 
 namespace Hoo\ProductFeeds\Presentation\Mapper\Feed\Kaina24Lt;
 
+use Hoo\WordPressPluginFramework\Http;
 use Hoo\ProductFeeds\Domain;
 use XMLWriter;
 
@@ -120,7 +121,7 @@ class Mapper
 
 		$this->text('category_id', $category->id());
 		$this->cdata('category_name', $category->name);
-		$this->cdata('category_link', $category->url);
+		$this->cdata('category_link', $this->utmUrl($category->url));
 	}
 
 	protected function specs(
@@ -175,5 +176,13 @@ class Mapper
 		$this->xmlWriter->startElement($name);
 		$this->xmlWriter->text($content);
 		$this->xmlWriter->endElement();
+	}
+
+	protected function utmUrl(Http\UrlInterface $url): Http\UrlInterface
+	{
+		return $url
+			->withQueryValue('utm_source', 'kaina24')
+			->withQueryValue('utm_medium', 'price_aggregator')
+			->withQueryValue('utm_campaign', 'feed_plugin');
 	}
 }

@@ -3,6 +3,7 @@
 namespace Hoo\ProductFeeds\Domain\Brands;
 
 use Hoo\WordPressPluginFramework\Collection;
+use Hoo\WordPressPluginFramework\Http;
 
 class Brand implements Collection\Item\ItemInterface
 {
@@ -10,7 +11,7 @@ class Brand implements Collection\Item\ItemInterface
 		protected readonly Brand\Id $id,
 		protected ?Brand\Id $parentId,
 		public string $name,
-		public string $url,
+		public Http\UrlInterface $url,
 	) {
 	}
 
