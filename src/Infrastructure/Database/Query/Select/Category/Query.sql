@@ -1,4 +1,4 @@
-WITH RECURSIVE cte AS (
+WITH RECURSIVE cte_term_taxonomy AS (
 	SELECT
 		term_taxonomy.term_id,
 		term_taxonomy.parent,
@@ -23,21 +23,21 @@ WITH RECURSIVE cte AS (
 
 		terms.name,
 
-		CONCAT(cte.url_path, '/', terms.slug) AS url_path
+		CONCAT(cte_term_taxonomy.url_path, '/', terms.slug) AS url_path
 
 	FROM :term_taxonomy AS term_taxonomy
 
 	JOIN :terms AS terms
 		ON terms.term_id = term_taxonomy.term_id
 
-	JOIN cte
-		ON cte.term_id = term_taxonomy.parent
+	JOIN cte_term_taxonomy
+		ON cte_term_taxonomy.term_id = term_taxonomy.parent
 )
 
 SELECT DISTINCT
 	term_id AS id,
-	term_taxonomy.parent AS parent_id,
+	parent AS parent_id,
 	name,
 	CONCAT(%s, '/', %s, '/', url_path, '/') AS url
 
-FROM cte
+FROM cte_term_taxonomy

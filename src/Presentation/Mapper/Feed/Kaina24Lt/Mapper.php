@@ -128,11 +128,11 @@ class Mapper
 		Domain\Products\Product $product,
 		Domain\Terms $terms,
 	): void {
+		$terms = clone $terms; //logical error - collection contains all terms and cannot be cleaned by iterating throght product attribute terms
+
 		$this->xmlWriter->startElement('specs');
 
 		foreach ($product->attributes as $attribute) {
-			$terms = clone $terms;
-
 			foreach ($attribute->terms as $term) {
 				if ($terms->has($term->key())) {
 					continue;
@@ -159,7 +159,7 @@ class Mapper
 	): void {
 		$this->xmlWriter->startElement('spec');
 		$this->xmlWriter->writeAttribute('name', $attribute->name);
-		$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $terms->all())));
+		//$this->xmlWriter->writeCData(implode(', ', array_map(fn($term) => $term->name, $terms->all())));
 		$this->xmlWriter->endElement();
 	}
 

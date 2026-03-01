@@ -13,7 +13,7 @@ class Mapper
 		foreach ($table as [
 			'id' => $id,
 			'name' => $name,
-			'url' => $url,
+			//'url' => $url,
 			'price' => $price,
 			'stock' => $stock,
 			'gtin' => $gtin,
@@ -21,7 +21,7 @@ class Mapper
 			'term_id' => $termId,
 			'brand_id' => $brandId,
 			'category_id' => $categoryId,
-			'tag_id' => $tagId,
+			//'tag_id' => $tagId,
 		]) {
 			$id = new Domain\Products\Product\Id(
 				$id,
@@ -33,7 +33,7 @@ class Mapper
 				$product = new Domain\Products\Product(
 					$id,
 					$name,
-					$url,
+					'',
 					$price,
 					$stock,
 					$gtin,
@@ -42,17 +42,13 @@ class Mapper
 			}
 
 			if ($attributeTaxonomy) {
-				$attributeSlug = $attributeTaxonomy; //replace pa_
+				$attributeSlug = strtr($attributeTaxonomy, [
+					'pa_' => '',
+				]);
 
 				$attributeSlug = new Domain\Products\Product\Attributes\Attribute\Slug(
 					$attributeSlug,
 				);
-
-				/*
-				$slug = strtr($row['attribute_taxonomy'], [
-					'pa_' => '',
-				]);
-				*/
 
 				if ($product->attributes->has($attributeSlug)) {
 					$attribute = $product->attributes->get($attributeSlug);
@@ -100,6 +96,7 @@ class Mapper
 				}
 			}
 
+			/*
 			if ($tagId) {
 				$tagId = new Domain\Products\Product\Tags\Tag\Id(
 					$tagId,
@@ -111,6 +108,7 @@ class Mapper
 					));
 				}
 			}
+			*/
 		}
 
 		return $products;
