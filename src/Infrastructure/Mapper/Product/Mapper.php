@@ -34,7 +34,7 @@ class Mapper
 				$product = new Domain\Products\Product(
 					$id,
 					$name,
-					Http\Url::from(''),
+					Http\Url::from('http://www.ru'),
 					$price,
 					$stock,
 					$gtin,
