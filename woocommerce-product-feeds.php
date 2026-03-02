@@ -59,19 +59,19 @@ $containerBuilder->addDefinitions([
 
 	Infrastructure\Database\Query\Select\Brand\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
-		->constructorParameter('permalink', get_option('woocommerce_brand_permalink') ?? ''),
+		->constructorParameter('permalink', trim(get_option('woocommerce_brand_permalink'), '/') ?? ''),
 
 	Infrastructure\Database\Query\Select\Category\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
-		->constructorParameter('permalink', get_option('woocommerce_permalinks')['category_base'] ?? ''),
+		->constructorParameter('permalink', trim(get_option('woocommerce_permalinks')['category_base'], '/') ?? ''),
 
 	Infrastructure\Database\Query\Select\Product\Simple\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
-		->constructorParameter('permalink', get_option('woocommerce_permalinks')['product_base'] ?? ''),
+		->constructorParameter('permalink', trim(get_option('woocommerce_permalinks')['product_base'], '/') ?? ''),
 
 	Infrastructure\Database\Query\Select\Tag\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
-		->constructorParameter('permalink', get_option('woocommerce_permalinks')['tag_base'] ?? ''),
+		->constructorParameter('permalink', trim(get_option('woocommerce_permalinks')['tag_base'], '/') ?? ''),
 
 	Infrastructure\Hook\Action\Hook::class => DI\factory(function (DI\Container $container) {
 		$pipeline = $container->get(WordPressPluginFramework\Pipeline\PipelineInterface::class);
@@ -87,6 +87,13 @@ $containerBuilder->addDefinitions([
 			...$feedPresenters
 		);
 	}),
+
+	Presentation\Mapper\Feed\Kaina24Lt\Mapper::class => DI\autowire()
+		->constructorParameter('utmSource', 'kaina24.lt')
+		->constructorParameter('utmMedium', 'ppc'),
+
+	Presentation\Presenters\Feed\Kaina24Lt\Presenter::class => DI\autowire()
+		->constructorParameter('path', 'kaina24-lt.xml'),
 
 	wpdb::class => DI\factory(function () {
 		global $wpdb;

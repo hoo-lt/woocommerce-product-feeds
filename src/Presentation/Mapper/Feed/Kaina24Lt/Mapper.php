@@ -10,6 +10,8 @@ class Mapper
 {
 	public function __construct(
 		protected readonly XMLWriter $xmlWriter,
+		protected readonly string $utmSource,
+		protected readonly string $utmMedium,
 	) {
 	}
 
@@ -80,6 +82,9 @@ class Mapper
 		}
 
 		$this->manufacturer($brands, $product);
+
+		$this->cdata('product_url', $this->utmUrl($product->url));
+
 		$this->category($categories, $product);
 		$this->specs($attributes, $product, $terms);
 
@@ -181,8 +186,7 @@ class Mapper
 	protected function utmUrl(Http\UrlInterface $url): Http\UrlInterface
 	{
 		return $url
-			->withQueryValue('utm_source', 'kaina24.lt')
-			->withQueryValue('utm_medium', 'cpc')
-			->withQueryValue('utm_campaign', 'feed_plugin');
+			->withQueryValue('utm_source', $this->utmSource)
+			->withQueryValue('utm_medium', $this->utmMedium);
 	}
 }

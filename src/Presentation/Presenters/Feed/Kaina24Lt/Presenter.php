@@ -15,12 +15,13 @@ class Presenter implements Presentation\Presenters\Feed\PresenterInterface
 		protected readonly Domain\Repository\Product\RepositoryInterface $productRepository,
 		protected readonly Domain\Repository\Term\RepositoryInterface $termRepository,
 		protected readonly Presentation\Mapper\Feed\Kaina24Lt\Mapper $kaina24LtMappers,
+		protected readonly string $path,
 	) {
 	}
 
 	public function path(): string
 	{
-		return 'kaina24-lt.xml';
+		return $this->path;
 	}
 
 	public function present(): Http\ResponseInterface
