@@ -65,6 +65,10 @@ $containerBuilder->addDefinitions([
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_permalinks')['category_base'] ?? ''),
 
+	Infrastructure\Database\Query\Select\Product\Simple\Query::class => DI\autowire()
+		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
+		->constructorParameter('permalink', get_option('woocommerce_permalinks')['product_base'] ?? ''),
+
 	Infrastructure\Database\Query\Select\Tag\Query::class => DI\autowire()
 		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
 		->constructorParameter('permalink', get_option('woocommerce_permalinks')['tag_base'] ?? ''),

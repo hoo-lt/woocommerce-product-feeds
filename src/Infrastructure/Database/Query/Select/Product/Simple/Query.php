@@ -14,6 +14,8 @@ class Query implements QueryInterface
 
 	public function __construct(
 		protected readonly wpdb $wpdb,
+		protected readonly string $homeUrl,
+		protected readonly string $permalink,
 		protected readonly string $path = __DIR__,
 	) {
 		$this->initialize();
@@ -33,6 +35,8 @@ class Query implements QueryInterface
 			':AND posts.ID IN ()' => $this->postIds ? 'AND posts.ID IN (' . implode(',', array_map(fn() => '%d', $this->postIds)) . ')' : '',
 		]), [
 			...$this->postIds,
+			$this->homeUrl,
+			$this->permalink,
 		]);
 	}
 

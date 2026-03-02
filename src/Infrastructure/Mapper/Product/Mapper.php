@@ -14,7 +14,7 @@ class Mapper
 		foreach ($table as [
 			'id' => $id,
 			'name' => $name,
-			//'url' => $url,
+			'url' => $url,
 			'price' => $price,
 			'stock' => $stock,
 			'gtin' => $gtin,
@@ -34,7 +34,7 @@ class Mapper
 				$product = new Domain\Products\Product(
 					$id,
 					$name,
-					Http\Url::from('http://www.ru'),
+					Http\Url::from($url),
 					$price,
 					$stock,
 					$gtin,

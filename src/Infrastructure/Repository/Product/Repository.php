@@ -29,10 +29,6 @@ class Repository implements Domain\Repository\Product\RepositoryInterface
 				$this->selectSimpleProductQuery
 					->postIds(...$termRelationshipObjectIds)
 			),
-			...$this->database->select(
-				$this->selectVariableProductQuery
-					->postIds(...$termRelationshipObjectIds)
-			),
 		]);
 	}
 }

@@ -38,7 +38,7 @@ cte_term_taxonomy AS (
 SELECT
 	cte_posts.id,
 	cte_posts.name,
-	cte_posts.slug,
+	CONCAT(%s, '/', %s, '/', cte_posts.slug, '/') AS url,
 	price.meta_value AS price,
 	stock.meta_value AS stock,
 	gtin.meta_value AS gtin,
