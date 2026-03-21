@@ -11,7 +11,7 @@ readonly class Slug implements Collection\Item\Key\KeyInterface
 	) {
 	}
 
-	public function __invoke(): int|string
+	public function __invoke(): string
 	{
 		return $this->slug;
 	}

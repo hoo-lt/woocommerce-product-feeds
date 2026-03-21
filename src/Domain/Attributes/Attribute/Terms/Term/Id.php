@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\ProductFeeds\Domain\Terms\Term;
+namespace Hoo\ProductFeeds\Domain\Attributes\Attribute\Terms\Term;
 
 use Hoo\WordPressPluginFramework\Collection;
 
@@ -11,7 +11,7 @@ readonly class Id implements Collection\Item\Key\KeyInterface
 	) {
 	}
 
-	public function __invoke(): int|string
+	public function __invoke(): int
 	{
 		return $this->id;
 	}

@@ -7,12 +7,12 @@ use Hoo\WordPressPluginFramework\Collection;
 class Categories extends Collection\AbstractCollection
 {
 	public function __construct(
-		Categories\Category ...$categories,
+		Categories\Category ...$items,
 	) {
-		$this->items = $categories;
+		$this->items = $items;
 	}
 
-	public function get(Collection\Item\Key\KeyInterface $key): Categories\Category
+	public function get(Collection\Item\Key\KeyInterface $key): ?Categories\Category
 	{
 		return parent::get($key);
 	}
@@ -27,13 +27,13 @@ class Categories extends Collection\AbstractCollection
 		return parent::last();
 	}
 
-	public function add(Categories\Category $categories): void
+	public function add(Categories\Category $item): void
 	{
-		$key = $categories->key();
+		$key = $item->key();
 		if ($this->has($key)) {
 			return;
 		}
 
-		$this->items[$key()] = $categories;
+		$this->items[$key()] = $item;
 	}
 }

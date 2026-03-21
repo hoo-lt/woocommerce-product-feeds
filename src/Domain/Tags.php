@@ -7,12 +7,12 @@ use Hoo\WordPressPluginFramework\Collection;
 class Tags extends Collection\AbstractCollection
 {
 	public function __construct(
-		Tags\Tag ...$tags,
+		Tags\Tag ...$items,
 	) {
-		$this->items = $tags;
+		$this->items = $items;
 	}
 
-	public function get(Collection\Item\Key\KeyInterface $key): Tags\Tag
+	public function get(Collection\Item\Key\KeyInterface $key): ?Tags\Tag
 	{
 		return parent::get($key);
 	}
@@ -27,13 +27,13 @@ class Tags extends Collection\AbstractCollection
 		return parent::last();
 	}
 
-	public function add(Tags\Tag $tag): void
+	public function add(Tags\Tag $item): void
 	{
-		$key = $tag->key();
+		$key = $item->key();
 		if ($this->has($key)) {
 			return;
 		}
 
-		$this->items[$key()] = $tag;
+		$this->items[$key()] = $item;
 	}
 }

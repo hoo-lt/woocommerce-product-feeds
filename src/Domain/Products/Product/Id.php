@@ -11,7 +11,7 @@ readonly class Id implements Collection\Item\Key\KeyInterface
 	) {
 	}
 
-	public function __invoke(): int|string
+	public function __invoke(): int
 	{
 		return $this->id;
 	}

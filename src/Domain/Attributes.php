@@ -7,12 +7,12 @@ use Hoo\WordPressPluginFramework\Collection;
 class Attributes extends Collection\AbstractCollection
 {
 	public function __construct(
-		Attributes\Attribute ...$attributes,
+		Attributes\Attribute ...$items,
 	) {
-		$this->items = $attributes;
+		$this->items = $items;
 	}
 
-	public function get(Collection\Item\Key\KeyInterface $key): Attributes\Attribute
+	public function get(Collection\Item\Key\KeyInterface $key): ?Attributes\Attribute
 	{
 		return parent::get($key);
 	}
@@ -27,13 +27,13 @@ class Attributes extends Collection\AbstractCollection
 		return parent::last();
 	}
 
-	public function add(Attributes\Attribute $attribute): void
+	public function add(Attributes\Attribute $item): void
 	{
-		$key = $attribute->key();
+		$key = $item->key();
 		if ($this->has($key)) {
 			return;
 		}
 
-		$this->items[$key()] = $attribute;
+		$this->items[$key()] = $item;
 	}
 }
