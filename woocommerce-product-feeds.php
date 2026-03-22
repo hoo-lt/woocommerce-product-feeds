@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: LT Product Feeds for WooCommerce
- * Plugin URI: https://github.com/hoo-lt/woocommerce-product-feeds
+ * Plugin URI: https://github.com/hoo-lt/woocommerce-plugin-lt-product-feeds
  * Description:
  * Version: 1.0.0
  * Requires at least: 6.9
@@ -11,7 +11,7 @@
  * Author URI: https://github.com/hoo-lt
  * License: GPL-3.0
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain: woocommerce-product-feeds
+ * Text Domain: lt-product-feeds
  * Domain Path: /languages
  * Requires Plugins: woocommerce
  */
