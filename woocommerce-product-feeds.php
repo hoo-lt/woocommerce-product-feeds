@@ -78,13 +78,12 @@ $containerBuilder->addDefinitions([
 	Infrastructure\Mapper\Category\Mapper::class => DI\autowire()
 		->constructorParameter('url', site_url())
 		->constructorParameter('path', '/' . ltrim(get_option('woocommerce_permalinks')['category_base'], '/') ?? ''),
+	Infrastructure\Mapper\Product\Mapper::class => DI\autowire()
+		->constructorParameter('url', site_url())
+		->constructorParameter('path', '/' . ltrim(get_option('woocommerce_permalinks')['product_base'], '/') ?? ''),
 	Infrastructure\Mapper\Tag\Mapper::class => DI\autowire()
 		->constructorParameter('url', site_url())
 		->constructorParameter('path', '/' . ltrim(get_option('woocommerce_permalinks')['tag_base'], '/') ?? ''),
-
-	Infrastructure\Database\Query\Select\Product\Simple\Query::class => DI\autowire()
-		->constructorParameter('homeUrl', rtrim(home_url(), '/'))
-		->constructorParameter('permalink', trim(get_option('woocommerce_permalinks')['product_base'], '/') ?? ''),
 
 	Infrastructure\Hook\Action\Hook::class => DI\factory(function (DI\Container $container) {
 		$pipeline = $container->get(WordPressPluginFramework\Pipeline\PipelineInterface::class);
