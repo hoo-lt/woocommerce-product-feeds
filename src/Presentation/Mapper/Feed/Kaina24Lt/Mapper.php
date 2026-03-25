@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Presentation\Mapper\Feed\Kaina24Lt;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Presentation\Mapper\Feed\Kaina24Lt;
 
 use Hoo\WordPressPluginFramework\Http;
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
-use Hoo\WordPressPlugin\LtProductFeeds\Presentation;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Presentation;
 use XMLWriter;
 
 class Mapper implements Presentation\Mapper\Feed\MapperInterface

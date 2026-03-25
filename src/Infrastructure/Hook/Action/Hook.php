@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Infrastructure\Hook\Action;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure\Hook\Action;
 
 use Hoo\WordPressPluginFramework\Pipeline\PipelineInterface;
-use Hoo\WordPressPlugin\LtProductFeeds\Infrastructure;
-use Hoo\WordPressPlugin\LtProductFeeds\Presentation;
+use Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure;
+use Hoo\WooCommercePlugin\LtProductFeeds\Presentation;
 
 class Hook
 {

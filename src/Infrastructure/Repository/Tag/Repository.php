@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Infrastructure\Repository\Tag;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure\Repository\Tag;
 
 use Hoo\WordPressPluginFramework\Database\DatabaseInterface;
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
-use Hoo\WordPressPlugin\LtProductFeeds\Infrastructure;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure;
 
 readonly class Repository implements Domain\Repository\Tag\RepositoryInterface
 {

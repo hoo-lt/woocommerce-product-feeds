@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Infrastructure\Mapper\TermRelationship;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure\Mapper\TermRelationship;
 
 class Mapper
 {

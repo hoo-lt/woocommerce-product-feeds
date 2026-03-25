@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Domain\Products\Product\AttributeSlugs\AttributeSlug\TermSlugs;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Domain\Products\Product\AttributeSlugs\AttributeSlug\TermSlugs;
 
 use Hoo\WordPressPluginFramework\Collection;
 

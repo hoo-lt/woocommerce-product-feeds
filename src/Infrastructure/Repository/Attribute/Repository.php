@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Infrastructure\Repository\Attribute;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure\Repository\Attribute;
 
 use Hoo\WordPressPluginFramework\Database\DatabaseInterface;
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
-use Hoo\WordPressPlugin\LtProductFeeds\Infrastructure;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure;
 
 class Repository implements Domain\Repository\Attribute\RepositoryInterface
 {

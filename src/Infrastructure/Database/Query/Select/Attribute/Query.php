@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Infrastructure\Database\Query\Select\Attribute;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure\Database\Query\Select\Attribute;
 
 use Hoo\WordPressPluginFramework\Database\Query\Select\QueryInterface;
 use Hoo\WordPressPluginFramework\Database\Query\QueryException;

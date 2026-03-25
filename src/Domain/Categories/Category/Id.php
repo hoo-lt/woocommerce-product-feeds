@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Domain\Categories\Category;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Domain\Categories\Category;
 
 use Hoo\WordPressPluginFramework\Collection;
 

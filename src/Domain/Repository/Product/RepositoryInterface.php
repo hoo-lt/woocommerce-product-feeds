@@ -1,8 +1,8 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Domain\Repository\Product;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Domain\Repository\Product;
 
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
 
 interface RepositoryInterface
 {

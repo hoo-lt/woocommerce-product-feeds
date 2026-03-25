@@ -1,10 +1,10 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Presentation\Controller\Feed;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Presentation\Controller\Feed;
 
 use Hoo\WordPressPluginFramework\Http;
-use Hoo\WordPressPlugin\LtProductFeeds\Presentation;
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Presentation;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
 
 class Controller implements Presentation\Controller\Feed\ControllerInterface
 {

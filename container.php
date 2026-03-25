@@ -3,9 +3,9 @@
 use Hoo\WordPressPluginFramework;
 use Hoo\WooCommercePluginFramework;
 
-use Hoo\WordPressPlugin\LtProductFeeds\Domain;
-use Hoo\WordPressPlugin\LtProductFeeds\Infrastructure;
-use Hoo\WordPressPlugin\LtProductFeeds\Presentation;
+use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
+use Hoo\WooCommercePlugin\LtProductFeeds\Infrastructure;
+use Hoo\WooCommercePlugin\LtProductFeeds\Presentation;
 
 $containerBuilder = new DI\ContainerBuilder();
 $containerBuilder->addDefinitions([

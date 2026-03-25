@@ -1,6 +1,6 @@
 <?php
 
-namespace Hoo\WordPressPlugin\LtProductFeeds\Domain;
+namespace Hoo\WooCommercePlugin\LtProductFeeds\Domain;
 
 enum TermMeta: string
 {
