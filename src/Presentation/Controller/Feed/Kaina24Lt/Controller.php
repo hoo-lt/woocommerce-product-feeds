@@ -6,15 +6,15 @@ use Hoo\WordPressPluginFramework\Http;
 use Hoo\WooCommercePlugin\LtProductFeeds\Presentation;
 use Hoo\WooCommercePlugin\LtProductFeeds\Domain;
 
-class Controller implements Presentation\Controller\Feed\ControllerInterface
+readonly class Controller implements Presentation\Controller\Feed\ControllerInterface
 {
 	public function __construct(
-		protected readonly Domain\Repository\Attribute\RepositoryInterface $attributeRepository,
-		protected readonly Domain\Repository\Brand\RepositoryInterface $brandRepository,
-		protected readonly Domain\Repository\Category\RepositoryInterface $categoryRepository,
-		protected readonly Domain\Repository\Product\RepositoryInterface $productRepository,
-		protected readonly Presentation\Mapper\Feed\MapperInterface $mapper,
-		protected readonly string $path,
+		protected Domain\Repository\Attribute\RepositoryInterface $attributeRepository,
+		protected Domain\Repository\Brand\RepositoryInterface $brandRepository,
+		protected Domain\Repository\Category\RepositoryInterface $categoryRepository,
+		protected Domain\Repository\Product\RepositoryInterface $productRepository,
+		protected Presentation\Mapper\Feed\MapperInterface $mapper,
+		protected string $path,
 	) {
 	}
 
@@ -29,7 +29,6 @@ class Controller implements Presentation\Controller\Feed\ControllerInterface
 				$this->brandRepository->all(),
 				$this->categoryRepository->all(),
 				$this->productRepository->all(),
-				$this->termRepository->all(),
 			),
 		);
 	}
