@@ -22,4 +22,4 @@ $container = $containerBuilder->build();
 $database = $container->get(DatabaseInterface::class);
 $query = $container->get(Infrastructure\Database\Query\Select\Product\Simple\Query::class);
 
-var_dump($database->json($query->withStatuses(Domain\Post\Status::Publish)));
+print_r($database->json($query->withStatuses(Domain\Post\Status::Publish)));

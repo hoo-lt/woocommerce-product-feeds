@@ -49,7 +49,7 @@ term_ids AS (
 		term_taxonomy.taxonomy
 ),
 
-attributes AS (
+taxonomy_attributes AS (
 	SELECT
 		post_id,
 		COALESCE(
@@ -60,7 +60,7 @@ attributes AS (
 				)
 			),
 			JSON_ARRAY()
-		) AS attributes
+		) AS taxonomy_attributes
 
 	FROM (
 		SELECT
@@ -100,16 +100,99 @@ attributes AS (
 postmeta AS (
 	SELECT
 		posts.id AS post_id,
-		CAST(MAX(CASE WHEN meta_key = '_regular_price' THEN meta_value END) AS DECIMAL(10,2)) AS regular_price,
-		CAST(MAX(CASE WHEN meta_key = '_sale_price' THEN meta_value END) AS DECIMAL(10,2)) AS sale_price,
-		CAST(NULLIF(MAX(CASE WHEN meta_key = '_sale_price_dates_from' THEN meta_value END), '0') AS UNSIGNED) AS sale_price_dates_from,
-		CAST(NULLIF(MAX(CASE WHEN meta_key = '_sale_price_dates_to' THEN meta_value END), '0') AS UNSIGNED) AS sale_price_dates_to,
-		CAST(MAX(CASE WHEN meta_key = '_stock' THEN meta_value END) AS SIGNED) AS stock,
-		MAX(CASE WHEN meta_key = '_stock_status' THEN meta_value END) AS stock_status,
-		MAX(CASE WHEN meta_key = '_global_unique_id' THEN meta_value END) AS global_unique_id,
-		MAX(CASE WHEN meta_key = '_product_attributes' THEN meta_value END) AS product_attributes,
-		CAST(NULLIF(MAX(CASE WHEN meta_key = '_thumbnail_id' THEN meta_value END), '') AS UNSIGNED) AS thumbnail_id,
-		NULLIF(MAX(CASE WHEN meta_key = '_product_image_gallery' THEN meta_value END), '') AS product_image_gallery
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_regular_price'
+						THEN meta_value
+					END
+				),
+				''
+			) AS DECIMAL(10,2)
+		) AS regular_price,
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_sale_price'
+						THEN meta_value
+					END
+				),
+				''
+			) AS DECIMAL(10,2)
+		) AS sale_price,
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_sale_price_dates_from'
+						THEN meta_value
+					END
+				),
+				'0'
+			) AS UNSIGNED
+		) AS sale_price_dates_from,
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_sale_price_dates_to'
+						THEN meta_value
+					END
+				),
+				'0'
+			) AS UNSIGNED
+		) AS sale_price_dates_to,
+		MAX(
+			CASE
+				WHEN meta_key = '_global_unique_id'
+				THEN meta_value
+			END
+		) AS global_unique_id,
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_stock'
+						THEN meta_value
+					END
+				),
+				''
+			) AS SIGNED
+		) AS stock,
+		MAX(
+			CASE
+				WHEN meta_key = '_stock_status'
+				THEN meta_value
+			END
+		) AS stock_status,
+		CAST(
+			NULLIF(
+				MAX(
+					CASE
+						WHEN meta_key = '_thumbnail_id'
+						THEN meta_value
+					END
+				),
+				''
+			) AS UNSIGNED
+		) AS thumbnail_id,
+		NULLIF(
+			MAX(
+				CASE
+					WHEN meta_key = '_product_image_gallery'
+					THEN meta_value
+				END
+			),
+			''
+		) AS product_image_gallery,
+		MAX(
+			CASE
+				WHEN meta_key = '_product_attributes'
+				THEN meta_value
+			END
+		) AS product_attributes
 
 	FROM :postmeta
 
@@ -121,12 +204,12 @@ postmeta AS (
 			'_sale_price',
 			'_sale_price_dates_from',
 			'_sale_price_dates_to',
+			'_global_unique_id',
 			'_stock',
 			'_stock_status',
-			'_global_unique_id',
-			'_product_attributes',
 			'_thumbnail_id',
-			'_product_image_gallery'
+			'_product_image_gallery',
+			'_product_attributes'
 		)
 
 	GROUP BY
@@ -144,16 +227,16 @@ SELECT
 				'sale_price', sale_price,
 				'sale_price_dates_from', sale_price_dates_from,
 				'sale_price_dates_to', sale_price_dates_to,
+				'global_unique_id', global_unique_id,
 				'stock', stock,
 				'stock_status', stock_status,
 				'thumbnail_id', thumbnail_id,
 				'product_image_gallery', product_image_gallery,
-				'global_unique_id', global_unique_id,
 				'product_attributes', product_attributes,
 				'brand_ids', brand_ids,
 				'category_ids', category_ids,
 				'tag_ids', tag_ids,
-				'attributes', attributes
+				'taxonomy_attributes', taxonomy_attributes
 			)
 		),
 		JSON_ARRAY()
@@ -177,18 +260,18 @@ FROM (
 			JSON_ARRAY()
 		) AS tag_ids,
 		COALESCE(
-			attributes.attributes,
+			taxonomy_attributes.taxonomy_attributes,
 			JSON_ARRAY()
-		) AS attributes,
+		) AS taxonomy_attributes,
 		postmeta.regular_price,
 		postmeta.sale_price,
 		postmeta.sale_price_dates_from,
 		postmeta.sale_price_dates_to,
+		postmeta.global_unique_id,
 		postmeta.stock,
 		postmeta.stock_status,
 		postmeta.thumbnail_id,
 		postmeta.product_image_gallery,
-		postmeta.global_unique_id,
 		postmeta.product_attributes
 
 	FROM posts
@@ -202,8 +285,8 @@ FROM (
 	LEFT JOIN term_ids AS tag_ids
 		ON tag_ids.post_id = posts.id
 		AND tag_ids.taxonomy = 'product_tag'
-	LEFT JOIN attributes
-		ON attributes.post_id = posts.id
+	LEFT JOIN taxonomy_attributes
+		ON taxonomy_attributes.post_id = posts.id
 	LEFT JOIN postmeta
 		ON postmeta.post_id = posts.id
 ) AS json
