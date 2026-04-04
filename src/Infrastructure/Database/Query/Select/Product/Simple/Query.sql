@@ -2,7 +2,9 @@ WITH posts AS (
 	SELECT
 		posts.ID AS id,
 		posts.post_title AS name,
-		posts.post_name AS slug
+		posts.post_name AS slug,
+		posts.post_content AS description,
+		posts.post_excerpt AS short_description
 
 	FROM :posts AS posts
 
@@ -222,7 +224,9 @@ SELECT
 			JSON_OBJECT(
 				'id', id,
 				'name', name,
-				'path', path,
+				'slug', slug,
+				'description', description,
+				'short_description', short_description,
 				'regular_price', regular_price,
 				'sale_price', sale_price,
 				'sale_price_dates_from', sale_price_dates_from,
@@ -246,7 +250,9 @@ FROM (
 	SELECT
 		posts.id,
 		posts.name,
-		posts.slug AS path,
+		posts.slug,
+		posts.description,
+		posts.short_description,
 		COALESCE(
 			brand_ids.term_ids,
 			JSON_ARRAY()

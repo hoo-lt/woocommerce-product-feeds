@@ -26,7 +26,7 @@ class Mapper
 				new Domain\Products\Product\Id($row['id']),
 				null,
 				$row['name'],
-				$this->url->withPath("{$this->url->path()}/{$row['path']}"),
+				$this->url->withPath("{$this->url->path()}/{$row['slug']}"),
 				new Domain\Products\Product\Price(
 					$row['regular_price'],
 					$row['sale_price'],
@@ -94,6 +94,18 @@ class Mapper
 				}
 
 				$product->taxonomyAttributes->add($taxonomyAttribute);
+			}
+
+			if ($row['thumbnail_id']) {
+				$product->imageIds->add(
+					new Domain\Products\Product\ImageIds\ImageId($row['thumbnail_id']),
+				);
+			}
+
+			foreach (array_filter(array_map('intval', explode(',', $row['product_image_gallery'] ?? ''))) as $imageId) {
+				$product->imageIds->add(
+					new Domain\Products\Product\ImageIds\ImageId($imageId),
+				);
 			}
 
 			$products->add($product);

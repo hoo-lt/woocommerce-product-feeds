@@ -7,6 +7,7 @@ use Hoo\WordPressPluginFramework\Http;
 
 readonly class Product implements Collection\Item\ItemInterface
 {
+	public Product\ImageIds $imageIds;
 	public Product\Attributes $attributes;
 	public Product\TaxonomyAttributes $taxonomyAttributes;
 	public Product\BrandIds $brandIds;
@@ -23,6 +24,7 @@ readonly class Product implements Collection\Item\ItemInterface
 		public Product\StockStatus $stockStatus,
 		public ?string $gtin,
 	) {
+		$this->imageIds = new Product\ImageIds();
 		$this->attributes = new Product\Attributes();
 		$this->taxonomyAttributes = new Product\TaxonomyAttributes();
 		$this->brandIds = new Product\BrandIds();
